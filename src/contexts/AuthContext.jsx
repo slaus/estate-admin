@@ -21,10 +21,16 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await authAPI.getUser();
-      setUser(response.data);
+      const result = await authAPI.getUser();
+      if (result.success && result.user) {
+        setUser(result.user);
+      } else {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+      }
     } catch (error) {
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
     } finally {
       setLoading(false);
     }
@@ -33,14 +39,22 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     setLoading(true);
     try {
-      const response = await authAPI.login(credentials);
-      localStorage.setItem('auth_token', response.data.token);
-      setUser(response.data.user);
-      return { success: true };
+      const result = await authAPI.login(credentials);
+      
+      // result теперь содержит { success, user, token } или { success, message }
+      if (result.success && result.token) {
+        setUser(result.user);
+        return { success: true };
+      } else {
+        return { 
+          success: false, 
+          message: result.message || 'Login failed' 
+        };
+      }
     } catch (error) {
       return { 
         success: false, 
-        message: error.message || 'Login failed' 
+        message: error.message || 'An error occurred' 
       };
     } finally {
       setLoading(false);

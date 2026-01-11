@@ -1,9 +1,58 @@
 import api from './axios';
 
 export const authAPI = {
-  login: (credentials) => api.post('/login', credentials),
-  logout: () => api.post('/logout'),
-  getUser: () => api.get('/user'),
+  login: async (credentials) => {
+    try {
+      const response = await api.post('/login', credentials);
+      
+      // Теперь response - это прямой объект от бэкенда
+      // { user: {...}, token: "...", message: "..." }
+      
+      if (response.token) {
+        localStorage.setItem('auth_token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        return { 
+          success: true, 
+          user: response.user, 
+          token: response.token 
+        };
+      } else {
+        return { 
+          success: false, 
+          message: response.message || 'Login failed' 
+        };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return { 
+        success: false, 
+        message: error.message || error.message || 'Network error' 
+      };
+    }
+  },
+
+  logout: async () => {
+    try {
+      await api.post('/logout');
+      return { success: true };
+    } catch (error) {
+      return { success: false, error };
+    }
+  },
+
+  getUser: async () => {
+    try {
+      const response = await api.get('/user');
+      // response = { user: {...} }
+      return { 
+        success: true, 
+        user: response.user 
+      };
+    } catch (error) {
+      return { success: false, error };
+    }
+  },
+
   register: (data) => api.post('/register', data),
 };
 
