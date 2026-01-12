@@ -4,8 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
+import Logo from '../assets/logo.svg';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -39,13 +39,13 @@ const Login = () => {
     const newErrors = {};
     
     if (!credentials.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Потрібен e-mail';
     } else if (!/\S+@\S+\.\S+/.test(credentials.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = 'Неправільний Email';
     }
     
     if (!credentials.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'Потрібен пароль';
     }
     
     return newErrors;
@@ -69,11 +69,11 @@ const Login = () => {
       if (result.success) {
         navigate(from, { replace: true });
       } else {
-        setErrors({ general: result.message || 'Login failed' });
+        setErrors({ general: result.message || 'Не вдалося ввійти' });
       }
     } catch (error) {
       setErrors({ 
-        general: error.message || 'An error occurred during login' 
+        general: error.message || 'Під час входу сталася помилка' 
       });
     } finally {
       setLoading(false);
@@ -81,12 +81,11 @@ const Login = () => {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center vh-100">
-      <Card style={{ width: '100%', maxWidth: '400px' }}>
+    <div className="px-4 d-flex align-items-center justify-content-center vh-100 text-center login-page">
+      <Card style={{ width: '100%', maxWidth: '320px', minWidth: '250px', border: 'none', boxShadow: '0 0 20px rgba(0,0,0,0.1)' }}>
         <Card.Body>
-          <div className="text-center mb-4">
-            <h2>Estate Admin</h2>
-            <p className="text-muted">Sign in to your account</p>
+          <div className="mb-4">
+            <img src={Logo} alt="Logo" width="180" />
           </div>
           
           {errors.general && (
@@ -97,14 +96,14 @@ const Login = () => {
           
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
                 value={credentials.email}
                 onChange={handleChange}
                 isInvalid={!!errors.email}
-                placeholder="Enter email"
+                placeholder="Введіть e-mail"
+                className='text-center'
               />
               <Form.Control.Feedback type="invalid">
                 {errors.email}
@@ -112,14 +111,14 @@ const Login = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
                 value={credentials.password}
                 onChange={handleChange}
                 isInvalid={!!errors.password}
-                placeholder="Password"
+                placeholder="Введіть пароль"
+                className='text-center'
               />
               <Form.Control.Feedback type="invalid">
                 {errors.password}
@@ -129,13 +128,41 @@ const Login = () => {
             <Button 
               variant="primary" 
               type="submit" 
-              className="w-100"
+              className="w-100 py-2 mb-3"
               disabled={loading}
+              style={{
+                backgroundColor: '#000',
+                borderColor: '#000',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#333'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#000'}
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Вхід...
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-box-arrow-in-right me-2"></i>
+                  Авторизація
+                </>
+              )}
             </Button>
           </Form>
           
+          <div className="text-center">
+            <small 
+              className="text-muted" 
+              style={{cursor: 'pointer'}}
+              onClick={() => {/* Логика восстановления пароля */}}
+            >
+              Забули пароль?
+            </small>
+          </div>
+
           <div className="text-center mt-3">
             <small className="text-muted">
               Default: admin@example.com / 12345678
@@ -143,7 +170,20 @@ const Login = () => {
           </div>
         </Card.Body>
       </Card>
-    </Container>
+
+      <style>
+        {`
+          .form-control:focus {
+            border-color: #000;
+            box-shadow: 0 0 0 0.25rem rgba(0,0,0,0.25);
+          }
+          
+          .form-control:focus + .input-group-text {
+            border-color: #000;
+          }
+        `}
+      </style>
+    </div>
   );
 };
 

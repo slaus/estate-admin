@@ -15,11 +15,28 @@ const Layout = () => {
   const navigate = useNavigate();
   const [showSidebar, setShowSidebar] = useState(false);
   const { notifications, removeNotification } = useStore();
+  const { tokenWillExpireSoon, formatTimeLeft, getTokenTimeLeft } = useAuth();
+  const [showExpiryWarning, setShowExpiryWarning] = useState(false);
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
   };
+
+  React.useEffect(() => {
+    const checkExpiry = () => {
+      if (tokenWillExpireSoon()) {
+        setShowExpiryWarning(true);
+      } else {
+        setShowExpiryWarning(false);
+      }
+    };
+    
+    const interval = setInterval(checkExpiry, 30000); // Проверяем каждые 30 секунд
+    checkExpiry(); // Первоначальная проверка
+    
+    return () => clearInterval(interval);
+  }, [tokenWillExpireSoon]);
 
   const menuItems = [
     { path: '/', label: 'Dashboard', icon: 'speedometer2' },
@@ -72,6 +89,27 @@ const Layout = () => {
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
+
+          {showExpiryWarning && (
+            <Toast 
+              onClose={() => setShowExpiryWarning(false)} 
+              show={showExpiryWarning} 
+              delay={10000}
+              autohide
+              bg="warning"
+              className="position-fixed top-0 end-0 m-3"
+              style={{ zIndex: 9999 }}
+            >
+              <Toast.Header closeButton>
+                <strong className="me-auto">⚠️ Увага! Сесія закінчується</strong>
+                <small>{formatTimeLeft()}</small>
+              </Toast.Header>
+              <Toast.Body>
+                Час сесії закінчиться через {formatTimeLeft()}. 
+                Будь ласка, збережіть усі дані та повторно авторизуйтеся.
+              </Toast.Body>
+            </Toast>
+          )}
         </Container>
       </Navbar>
 
