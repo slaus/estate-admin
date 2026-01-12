@@ -160,6 +160,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, [getTokenTimeLeft]);
 
+  const hasPermission = useCallback((permission) => {
+    if (!user?.permissions) return false;
+    return user.permissions.includes(permission);
+  }, [user]);
+
+  const canManageUsers = useCallback(() => {
+    return user?.role === 'superadmin' || user?.role === 'admin';
+  }, [user]);
+
   const value = {
     user,
     loading,
@@ -171,6 +180,12 @@ export const AuthProvider = ({ children }) => {
     tokenWillExpireSoon,
     formatTimeLeft,
     handleCleanLogout, // Для принудительного выхода
+    hasPermission,
+    canManageUsers,
+    userRole: user?.role,
+    isSuperAdmin: user?.role === 'superadmin',
+    isAdmin: user?.role === 'admin' || user?.role === 'superadmin',
+    isManager: user?.role === 'manager' || user?.role === 'admin' || user?.role === 'superadmin',
   };
 
   return (

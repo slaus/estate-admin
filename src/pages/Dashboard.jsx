@@ -74,7 +74,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <h1 className="mb-4">Dashboard</h1>
+      <h3 className="mb-4">Dashboard</h3>
       
       {error && (
         <Alert variant="danger" className="mb-4">

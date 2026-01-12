@@ -5,13 +5,16 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
+import { useAuthTranslations } from '../hooks/useTranslations';
 import Logo from '../assets/logo.svg';
 
 const Login = () => {
+  const { t } = useAuthTranslations();
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
   });
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -39,13 +42,13 @@ const Login = () => {
     const newErrors = {};
     
     if (!credentials.email.trim()) {
-      newErrors.email = 'Потрібен e-mail';
+      newErrors.email = t('login.errors.required_email');
     } else if (!/\S+@\S+\.\S+/.test(credentials.email)) {
-      newErrors.email = 'Неправільний Email';
+      newErrors.email = t('login.errors.invalid_email');
     }
     
     if (!credentials.password) {
-      newErrors.password = 'Потрібен пароль';
+      newErrors.password = t('login.errors.required_password');
     }
     
     return newErrors;
@@ -69,11 +72,11 @@ const Login = () => {
       if (result.success) {
         navigate(from, { replace: true });
       } else {
-        setErrors({ general: result.message || 'Не вдалося ввійти' });
+        setErrors({ general: result.message || t('login.errors.no_entry') });
       }
     } catch (error) {
       setErrors({ 
-        general: error.message || 'Під час входу сталася помилка' 
+        general: error.message || t('login.errors.invalid_login')
       });
     } finally {
       setLoading(false);
@@ -87,7 +90,7 @@ const Login = () => {
           <div className="mb-4">
             <img src={Logo} alt="Logo" width="180" />
           </div>
-          
+          <h4 className="mb-3">{t('login.title')}</h4>
           {errors.general && (
             <Alert variant="danger" dismissible onClose={() => setErrors({})}>
               {errors.general}
@@ -95,14 +98,14 @@ const Login = () => {
           )}
           
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3 form-group">
               <Form.Control
                 type="email"
                 name="email"
                 value={credentials.email}
                 onChange={handleChange}
                 isInvalid={!!errors.email}
-                placeholder="Введіть e-mail"
+                placeholder={t('login.email')}
                 className='text-center'
               />
               <Form.Control.Feedback type="invalid">
@@ -110,14 +113,14 @@ const Login = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3 form-group">
               <Form.Control
                 type="password"
                 name="password"
                 value={credentials.password}
                 onChange={handleChange}
                 isInvalid={!!errors.password}
-                placeholder="Введіть пароль"
+                placeholder={t('login.password')}
                 className='text-center'
               />
               <Form.Control.Feedback type="invalid">
@@ -142,12 +145,12 @@ const Login = () => {
               {loading ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  Вхід...
+                  {t('login.enter')}
                 </>
               ) : (
                 <>
                   <i className="bi bi-box-arrow-in-right me-2"></i>
-                  Авторизація
+                  {t('login.submit')}
                 </>
               )}
             </Button>
@@ -159,13 +162,19 @@ const Login = () => {
               style={{cursor: 'pointer'}}
               onClick={() => {/* Логика восстановления пароля */}}
             >
-              Забули пароль?
+              {t('login.forgot_password')}
             </small>
           </div>
 
-          <div className="text-center mt-3">
+          <div className="d-flex flex-column text-center mt-3">
             <small className="text-muted">
-              Default: admin@example.com / 12345678
+              superadmin@example.com / 12345678
+            </small>
+            <small className="text-muted">
+              admin@example.com / 12345678
+            </small>
+            <small className="text-muted">
+              manager@example.com / 12345678
             </small>
           </div>
         </Card.Body>

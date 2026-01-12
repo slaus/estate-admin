@@ -1,0 +1,14 @@
+{
+  "menu": {
+    "dashboard": "Dashboard",
+    "posts": "Posts",
+    "pages": "Pages",
+    "tags": "Tags",
+    "employees": "Employees",
+    "testimonials": "Testimonials",
+    "partners": "Partners",
+    "menus": "Menus",
+    "settings": "Settings",
+    "users": "Users"
+  }
+}

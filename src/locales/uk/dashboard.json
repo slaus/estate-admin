@@ -1,0 +1,35 @@
+{
+    "panel": {
+        "dashboard": {
+            "title": "Інформаційна панель",
+            "recent_posts": "Недавні публікації"
+        },
+        "menus": {
+            "title": "Меню"
+        },
+        "posts": {
+            "title": "Публікації"
+        },
+        "pages": {
+            "title": "Сторінки"
+        },
+        "tags": {
+            "title": "Теги"
+        },
+        "employees": {
+            "title": "Співробітники"
+        },
+        "testimonials": {
+            "title": "Відгуки"
+        },
+        "partners": {
+            "title": "Партнери"
+        },
+        "users": {
+            "title": "Користувачі"
+        },
+        "settings": {
+            "title": "Налаштування"
+        }
+    }
+}

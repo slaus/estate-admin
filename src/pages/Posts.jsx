@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { postsAPI } from '../api/services';
-import { useLoading } from '../contexts/LoadingContext';
-import useStore from '../store/useStore';
-import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
-import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Pagination from 'react-bootstrap/Pagination';
-import Modal from 'react-bootstrap/Modal';
-import Badge from 'react-bootstrap/Badge';
+import React, { useState, useEffect } from "react";
+import { postsAPI } from "../api/services";
+import { useLoading } from "../contexts/LoadingContext";
+import useStore from "../store/useStore";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import Pagination from "react-bootstrap/Pagination";
+import Modal from "react-bootstrap/Modal";
+import Badge from "react-bootstrap/Badge";
 
 const Posts = () => {
   const { showLoading, hideLoading } = useLoading();
   const { addNotification } = useStore();
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,9 +28,10 @@ const Posts = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = posts.filter(post =>
-      post.title.toLowerCase().includes(search.toLowerCase()) ||
-      post.slug.toLowerCase().includes(search.toLowerCase())
+    const filtered = posts.filter(
+      (post) =>
+        post.title.toLowerCase().includes(search.toLowerCase()) ||
+        post.slug.toLowerCase().includes(search.toLowerCase())
     );
     setFilteredPosts(filtered);
     setTotalPages(Math.ceil(filtered.length / postsPerPage));
@@ -38,18 +39,18 @@ const Posts = () => {
   }, [search, posts]);
 
   const fetchPosts = async () => {
-    showLoading('Loading posts...');
+    showLoading("Завантаження...");
     try {
       const response = await postsAPI.getAll();
       setPosts(response.data);
       addNotification({
-        type: 'success',
-        message: 'Posts loaded successfully'
+        type: "success",
+        message: "Posts loaded successfully",
       });
     } catch (error) {
       addNotification({
-        type: 'error',
-        message: 'Failed to load posts'
+        type: "error",
+        message: "Failed to load posts",
       });
     } finally {
       hideLoading();
@@ -63,19 +64,19 @@ const Posts = () => {
 
   const handleDeleteConfirm = async () => {
     if (!selectedPost) return;
-    
-    showLoading('Deleting post...');
+
+    showLoading("Deleting post...");
     try {
       await postsAPI.delete(selectedPost.id);
-      setPosts(posts.filter(p => p.id !== selectedPost.id));
+      setPosts(posts.filter((p) => p.id !== selectedPost.id));
       addNotification({
-        type: 'success',
-        message: 'Post deleted successfully'
+        type: "success",
+        message: "Post deleted successfully",
       });
     } catch (error) {
       addNotification({
-        type: 'error',
-        message: 'Failed to delete post'
+        type: "error",
+        message: "Failed to delete post",
       });
     } finally {
       hideLoading();
@@ -94,9 +95,9 @@ const Posts = () => {
     <>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="mb-0">Posts</h1>
-        <Button variant="primary" href="/posts/new">
+        <Button variant="secondary" href="/posts/new">
           <i className="bi bi-plus-circle me-2"></i>
-          Add New Post
+          Новий пост
         </Button>
       </div>
 
@@ -107,7 +108,7 @@ const Posts = () => {
               <i className="bi bi-search"></i>
             </InputGroup.Text>
             <Form.Control
-              placeholder="Search posts..."
+              placeholder="Пошук..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -123,11 +124,11 @@ const Posts = () => {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Title</th>
-                    <th>Slug</th>
-                    <th>Tags</th>
-                    <th>Created</th>
-                    <th>Actions</th>
+                    <th>Заголовок</th>
+                    <th>ЧПУ</th>
+                    <th>Тегі</th>
+                    <th>Дата</th>
+                    <th>Дії</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -145,29 +146,27 @@ const Posts = () => {
                       </td>
                       <td>
                         {post.tags && post.tags.length > 0 ? (
-                          post.tags.map(tag => (
+                          post.tags.map((tag) => (
                             <Badge key={tag.id} bg="secondary" className="me-1">
                               {tag.name}
                             </Badge>
                           ))
                         ) : (
-                          <span className="text-muted">No tags</span>
+                          <span className="text-muted">Без тегів</span>
                         )}
                       </td>
-                      <td>
-                        {new Date(post.created_at).toLocaleDateString()}
-                      </td>
+                      <td>{new Date(post.created_at).toLocaleDateString()}</td>
                       <td>
                         <div className="btn-group" role="group">
                           <Button
-                            variant="outline-primary"
+                            variant="primary"
                             size="sm"
                             href={`/posts/edit/${post.id}`}
                           >
                             <i className="bi bi-pencil"></i>
                           </Button>
                           <Button
-                            variant="outline-danger"
+                            variant="danger"
                             size="sm"
                             onClick={() => handleDeleteClick(post)}
                           >
@@ -183,15 +182,15 @@ const Posts = () => {
               {totalPages > 1 && (
                 <div className="d-flex justify-content-center">
                   <Pagination>
-                    <Pagination.First 
-                      onClick={() => paginate(1)} 
+                    <Pagination.First
+                      onClick={() => paginate(1)}
                       disabled={currentPage === 1}
                     />
-                    <Pagination.Prev 
-                      onClick={() => paginate(currentPage - 1)} 
+                    <Pagination.Prev
+                      onClick={() => paginate(currentPage - 1)}
                       disabled={currentPage === 1}
                     />
-                    
+
                     {[...Array(totalPages)].map((_, i) => (
                       <Pagination.Item
                         key={i + 1}
@@ -201,13 +200,13 @@ const Posts = () => {
                         {i + 1}
                       </Pagination.Item>
                     ))}
-                    
-                    <Pagination.Next 
-                      onClick={() => paginate(currentPage + 1)} 
+
+                    <Pagination.Next
+                      onClick={() => paginate(currentPage + 1)}
                       disabled={currentPage === totalPages}
                     />
-                    <Pagination.Last 
-                      onClick={() => paginate(totalPages)} 
+                    <Pagination.Last
+                      onClick={() => paginate(totalPages)}
                       disabled={currentPage === totalPages}
                     />
                   </Pagination>
@@ -217,12 +216,14 @@ const Posts = () => {
           ) : (
             <div className="text-center py-5">
               <i className="bi bi-newspaper fs-1 text-muted mb-3 d-block"></i>
-              <h5>No posts found</h5>
+              <h5>Публікації не знайдено</h5>
               <p className="text-muted">
-                {search ? 'Try a different search term' : 'Start by creating your first post'}
+                {search
+                  ? "Спробуйте інший пошуковий термін"
+                  : "Почніть зі створення своєї першої публікації"}
               </p>
-              <Button variant="primary" href="/posts/new">
-                Create First Post
+              <Button variant="secondary" href="/posts/new">
+                Створити новий пост
               </Button>
             </div>
           )}
@@ -236,8 +237,7 @@ const Posts = () => {
         </Modal.Header>
         <Modal.Body>
           Are you sure you want to delete post "
-          <strong>{selectedPost?.title}</strong>"?
-          This action cannot be undone.
+          <strong>{selectedPost?.title}</strong>"? This action cannot be undone.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
