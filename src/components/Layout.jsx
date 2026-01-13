@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
@@ -7,25 +7,30 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
-import Toast from "react-bootstrap/Toast";
-import useStore from "../store/useStore";
 import { useTranslations } from "../hooks/useTranslations";
+import ProfileModal from "../components/ProfileModal";
 
 import Logo from "../assets/logo-w.svg";
 import Avatar from "../assets/no-avatar.svg";
+import Sidebar from "./Sidebar";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Layout = () => {
-  const { user, logout, userRole } = useAuth();
+  const { user, logout} = useAuth();
   const navigate = useNavigate();
   const [showSidebar, setShowSidebar] = useState(false);
-  const { notifications, removeNotification } = useStore();
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const { tokenWillExpireSoon, formatTimeLeft } = useAuth();
   const [showExpiryWarning, setShowExpiryWarning] = useState(false);
-  const { t, locale, changeLocale, isLoading } = useTranslations();
-
+  const { locale, changeLocale, isLoading } = useTranslations();
+  
   const handleLogout = async () => {
     await logout();
     navigate("/login");
+  };
+
+  const handleProfileClick = () => {
+    setShowProfileModal(true);
   };
 
   useEffect(() => {
@@ -43,65 +48,13 @@ const Layout = () => {
     return () => clearInterval(interval);
   }, [tokenWillExpireSoon]);
 
-  const menuItems = useMemo(() => [
-    { path: "/", label: t("menu.dashboard"), icon: "speedometer2", visible: true },
-    {
-      path: "/menus",
-      label: t("menu.menus"),
-      icon: "menu-app",
-      visible: userRole === "admin" || userRole === "superadmin",
-    },
-    { path: "/posts", label: t("menu.posts"), icon: "newspaper", visible: true },
-    {
-      path: "/pages",
-      label: t("menu.pages"),
-      icon: "file-earmark-text",
-      visible: true,
-    },
-    { path: "/tags", label: t("menu.tags"), icon: "tags", visible: true },
-    {
-      path: "/employees",
-      label: t("menu.employees"),
-      icon: "people",
-      visible: true,
-    },
-    {
-      path: "/testimonials",
-      label: t("menu.testimonials"),
-      icon: "chat-quote",
-      visible: true,
-    },
-    {
-      path: "/partners",
-      label: t("menu.partners"),
-      icon: "building",
-      visible: true,
-    },
-    {
-      path: "/users",
-      label: t("menu.users"),
-      icon: "people-fill",
-      visible: userRole === "admin" || userRole === "superadmin",
-    },
-    {
-      path: "/settings",
-      label: t("menu.settings"),
-      icon: "gear",
-      visible: userRole === "admin" || userRole === "superadmin",
-    },
-  ], [t, userRole]);
-
   const handleLanguageChange = async (newLocale) => {
     await changeLocale(newLocale);
   };
 
   if (isLoading) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">{t("common.loading")}</span>
-        </div>
-      </div>
+      <LoadingSpinner/>
     );
   }
 
@@ -119,25 +72,7 @@ const Layout = () => {
                   style={{ width: "100%", maxWidth: "160px" }}
                 />
               </div>
-              <Nav className="flex-column">
-                {menuItems
-                  .filter((item) => item.visible)
-                  .map((item) => (
-                    <Nav.Link
-                      key={item.path}
-                      as={NavLink}
-                      to={item.path}
-                      className={({ isActive }) =>
-                        `d-flex align-items-center mb-2 ${
-                          isActive ? "active" : ""
-                        }`
-                      }
-                    >
-                      <i className={`bi bi-${item.icon}`}></i>
-                      <span className="d-lg-inline ms-2">{item.label}</span>
-                    </Nav.Link>
-                  ))}
-              </Nav>
+              <Sidebar userRole={user?.role} onItemClick={() => {}} />
             </div>
           </div>
 
@@ -183,7 +118,7 @@ const Layout = () => {
                       title={
                         <div className="d-flex align-items-center gap-2 menu">
                           <img
-                            src={Avatar}
+                            src={user?.avatar || Avatar}
                             alt={user?.name || "User"}
                             width="40"
                           />
@@ -196,14 +131,14 @@ const Layout = () => {
                         </div>
                       }
                     >
-                      <NavDropdown.Item as={Link} to="#">
+                      <NavDropdown.Item onClick={handleProfileClick}>
                         <i className="bi bi-person me-2"></i>
-                        {t("auth.profile.menu")}
+                        Profile
                       </NavDropdown.Item>
                       <NavDropdown.Divider />
                       <NavDropdown.Item onClick={handleLogout}>
                         <i className="bi bi-box-arrow-right me-2"></i>
-                        {t("auth.logout.menu")}
+                        Logout
                       </NavDropdown.Item>
                     </NavDropdown>
                   </Nav>
@@ -223,24 +158,15 @@ const Layout = () => {
           <Offcanvas.Title>Menu</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Nav className="flex-column">
-            {menuItems
-              .filter((item) => item.visible)
-              .map((item) => (
-                <Nav.Link
-                  key={item.path}
-                  as={NavLink}
-                  to={item.path}
-                  className="d-flex align-items-center mb-2"
-                  onClick={() => setShowSidebar(false)}
-                >
-                  <i className={`bi bi-${item.icon} me-2`}></i>
-                  {item.label}
-                </Nav.Link>
-              ))}
-          </Nav>
+          <Sidebar userRole={user?.role} onItemClick={() => {}} />
         </Offcanvas.Body>
       </Offcanvas>
+
+      {/* Модальное окно редактирования профиля */}
+      <ProfileModal 
+        show={showProfileModal}
+        onHide={() => setShowProfileModal(false)}
+      />
     </>
   );
 };

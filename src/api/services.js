@@ -5,9 +5,6 @@ export const authAPI = {
     try {
       const response = await api.post('/login', credentials);
       
-      // Теперь response - это прямой объект от бэкенда
-      // { user: {...}, token: "...", message: "..." }
-      
       if (response.token) {
         localStorage.setItem('auth_token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
@@ -54,6 +51,48 @@ export const authAPI = {
   },
 
   register: (data) => api.post('/register', data),
+
+  updateProfile: async (data) => {
+    try {
+      // Для обновления аватара нужен FormData
+      if (data.avatar instanceof File) {
+        const formData = new FormData();
+        formData.append('avatar', data.avatar);
+        if (data.name) formData.append('name', data.name);
+        if (data.email) formData.append('email', data.email);
+        if (data.phone) formData.append('phone', data.phone);
+        if (data.password_current) formData.append('password_current', data.password_current);
+        if (data.password) formData.append('password', data.password);
+        if (data.password_confirmation) formData.append('password_confirmation', data.password_confirmation);
+        
+        const response = await api.post('/profile/update', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        return { success: true, user: response.user };
+      } else {
+        // Обычное обновление без файла
+        const response = await api.post('/profile/update', data);
+        return { success: true, user: response.user };
+      }
+    } catch (error) {
+      return { 
+        success: false, 
+        message: error.message || 'Update failed',
+        errors: error.errors 
+      };
+    }
+  },
+
+  removeAvatar: async () => {
+    try {
+      const response = await api.delete('/profile/avatar');
+      return { success: true, user: response.user };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
 };
 
 export const postsAPI = {

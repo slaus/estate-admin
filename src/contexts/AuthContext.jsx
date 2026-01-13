@@ -169,6 +169,44 @@ export const AuthProvider = ({ children }) => {
     return user?.role === 'superadmin' || user?.role === 'admin';
   }, [user]);
 
+  const updateProfile = async (profileData) => {
+    try {
+      const result = await authAPI.updateProfile(profileData);
+      
+      if (result.success && result.user) {
+        // Обновляем пользователя в контексте и localStorage
+        setUser(result.user);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        return { success: true, user: result.user };
+      } else {
+        return { 
+          success: false, 
+          message: result.message || 'Update failed',
+          errors: result.errors 
+        };
+      }
+    } catch (error) {
+      return { 
+        success: false, 
+        message: error.message || 'An error occurred' 
+      };
+    }
+  };
+
+  const removeAvatar = async () => {
+    try {
+      const result = await authAPI.removeAvatar();
+      if (result.success && result.user) {
+        setUser(result.user);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        return { success: true };
+      }
+      return { success: false, message: result.message };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -182,6 +220,8 @@ export const AuthProvider = ({ children }) => {
     handleCleanLogout, // Для принудительного выхода
     hasPermission,
     canManageUsers,
+    updateProfile,
+    removeAvatar,
     userRole: user?.role,
     isSuperAdmin: user?.role === 'superadmin',
     isAdmin: user?.role === 'admin' || user?.role === 'superadmin',
