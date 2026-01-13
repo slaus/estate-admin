@@ -3,9 +3,9 @@ import { publicAPI } from '../api/services';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import Table from 'react-bootstrap/Table';
+import Loading from '../components/Loading';
 import { useTranslations } from '../hooks/useTranslations';
 
 const Dashboard = () => {
@@ -64,18 +64,12 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return (
-      <div className="d-flex justify-content-center my-5">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">{t('common.loading')}</span>
-        </Spinner>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
     <>
-      <h3 className="mb-4">{t('dashboard.panel.dashboard.title')}</h3>
+      <h1 className="h4 mb-4 text-gray-800">{t('dashboard.panel.dashboard.title')}</h1>
       
       {error && (
         <Alert variant="danger" className="mb-4">
@@ -134,7 +128,6 @@ const Dashboard = () => {
         </Col>
       </Row>
 
-      {/* Последние посты */}
       <Card className="mb-4">
         <Card.Header>
         <h5 className="mb-0">{t('dashboard.panel.dashboard.recent_posts')}</h5>
@@ -165,7 +158,6 @@ const Dashboard = () => {
         </Card.Body>
       </Card>
 
-      {/* Quick Actions */}
       <Card>
         <Card.Header>
           <h5 className="mb-0">Quick Actions</h5>
@@ -173,25 +165,25 @@ const Dashboard = () => {
         <Card.Body>
           <Row>
             <Col md={3} className="mb-2">
-              <a href="/posts" className="btn btn-outline-primary w-100">
+              <a href="/posts" className="btn btn-primary w-100">
                 <i className="bi bi-plus-circle me-2"></i>
                 Add Post
               </a>
             </Col>
             <Col md={3} className="mb-2">
-              <a href="/pages" className="btn btn-outline-success w-100">
+              <a href="/pages" className="btn btn-success w-100">
                 <i className="bi bi-plus-circle me-2"></i>
                 Add Page
               </a>
             </Col>
             <Col md={3} className="mb-2">
-              <a href="/tags" className="btn btn-outline-warning w-100">
+              <a href="/tags" className="btn btn-warning w-100">
                 <i className="bi bi-tag me-2"></i>
                 Manage Tags
               </a>
             </Col>
             <Col md={3} className="mb-2">
-              <a href="/settings" className="btn btn-outline-info w-100">
+              <a href="/settings" className="btn btn-info w-100">
                 <i className="bi bi-gear me-2"></i>
                 Settings
               </a>

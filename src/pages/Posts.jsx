@@ -10,8 +10,11 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Pagination from "react-bootstrap/Pagination";
 import Modal from "react-bootstrap/Modal";
 import Badge from "react-bootstrap/Badge";
+import { useTranslations } from '../hooks/useTranslations';
+import Loading from '../components/Loading';
 
 const Posts = () => {
+  const { t } = useTranslations();
   const { showLoading, hideLoading } = useLoading();
   const { addNotification } = useStore();
   const [posts, setPosts] = useState([]);
@@ -22,6 +25,7 @@ const Posts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const postsPerPage = 10;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchPosts();
@@ -39,7 +43,8 @@ const Posts = () => {
   }, [search, posts]);
 
   const fetchPosts = async () => {
-    showLoading("Завантаження...");
+    // showLoading("Завантаження...");
+    setLoading(true);
     try {
       const response = await postsAPI.getAll();
       setPosts(response.data);
@@ -53,7 +58,8 @@ const Posts = () => {
         message: "Failed to load posts",
       });
     } finally {
-      hideLoading();
+      // hideLoading();
+      setLoading(false);
     }
   };
 
@@ -65,7 +71,9 @@ const Posts = () => {
   const handleDeleteConfirm = async () => {
     if (!selectedPost) return;
 
-    showLoading("Deleting post...");
+    // showLoading("Deleting post...");
+    setLoading(true);
+
     try {
       await postsAPI.delete(selectedPost.id);
       setPosts(posts.filter((p) => p.id !== selectedPost.id));
@@ -79,7 +87,8 @@ const Posts = () => {
         message: "Failed to delete post",
       });
     } finally {
-      hideLoading();
+      // hideLoading();
+      setLoading(false);
       setShowDeleteModal(false);
       setSelectedPost(null);
     }
@@ -91,10 +100,14 @@ const Posts = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="mb-0">Posts</h1>
+        <h1 className="h4 mb-4 text-gray-800">{t('dashboard.panel.posts.title')}</h1>
         <Button variant="secondary" href="/posts/new">
           <i className="bi bi-plus-circle me-2"></i>
           Новий пост

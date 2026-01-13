@@ -1,8 +1,8 @@
 :root {
-  font-family: system-ui, Roboto, sans-serif;
-  line-height: 1.5;
-  font-weight: 300;
-font-size: 16px;
+  font-family     : system-ui, Roboto, sans-serif;
+  line-height     : 1.5;
+  font-weight     : 300;
+  font-size       : 16px;
   color-scheme    : light dark;
   color           : rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -18,22 +18,15 @@ font-size: 16px;
   min-height: 100vh;
 }
 
-a {
-  font-weight    : 500;
-  color          : #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
 body {
+  width      : 100%;
+  min-height : 100vh;
   margin     : 0;
   display    : flex;
   place-items: center;
   min-width  : 320px;
   min-height : 100vh;
+  overflow-x : hidden;
 }
 
 h1 {
@@ -42,7 +35,11 @@ h1 {
 }
 
 .layout {
-  background: #ededed;
+  display         : flex;
+  flex-direction  : column;
+  background-color: #f8f9fc;
+  width           : 100%;
+  overflow-x      : hidden;
 }
 
 .login-page {
@@ -53,7 +50,23 @@ h1 {
 .left-sidebar {
   background: rgb(192, 0, 0);
   min-height: 100vh;
-  padding   : 0 !important;
+  padding   : 0;
+  width     : 14rem;
+  min-width : 14rem;
+}
+
+.left-sidebar .logo {
+  height         : 74px;
+  width          : 100%;
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+  overflow       : hidden;
+}
+
+.left-sidebar .logo img {
+  width    : 100%;
+  max-width: 160px;
 }
 
 .left-sidebar .nav-link {
@@ -63,10 +76,45 @@ h1 {
   display       : flex;
   gap           : 20px;
   align-items   : center;
+  transition    : all .5s ease;
+}
+
+.left-sidebar .nav-link span {
+  font-size: 14px;
+}
+
+.left-sidebar.mobile {
+  width    : 3.2rem;
+  min-width: 3.2rem;
+}
+
+.left-sidebar.mobile .logo img {
+  display: none;
+}
+
+.left-sidebar.mobile .nav-link span {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .left-sidebar {
+    width    : 3.2rem;
+    min-width: 3.2rem;
+  }
+
+  .left-sidebar .logo img {
+    display: none;
+  }
+
+  .left-sidebar .nav-link span {
+    display: none;
+  }
 }
 
 .left-sidebar .nav-link i {
-  color: #fff;
+  color     : #fff;
+  opacity   : .65;
+  transition: all .5s ease;
 }
 
 .left-sidebar .nav-link:hover {
@@ -74,7 +122,8 @@ h1 {
 }
 
 .left-sidebar .nav-link:hover i {
-  color: #fff;
+  color  : #fff;
+  opacity: 1;
 }
 
 .left-sidebar .nav-link.active {
@@ -83,7 +132,8 @@ h1 {
 }
 
 .left-sidebar .nav-link.active i {
-  color     : #fffd94;
+  color  : #fffd94;
+  opacity: 1;
 }
 
 .nav-item .dropdown-item.active,
@@ -96,8 +146,8 @@ h1 {
 .nav-item .nav-link {
   display    : flex;
   align-items: center;
-  gap        : 20px;
-  height: 100%;
+  gap        : 10px;
+  height     : 100%;
 }
 
 .nav-item .menu .user {
@@ -105,28 +155,7 @@ h1 {
 }
 
 .nav-item .menu .email {
-  font-size: 13px;
-}
-
-button {
-  border-radius   : 8px;
-  border          : 1px solid transparent;
-  padding         : 0.6em 1.2em;
-  font-size       : 1em;
-  font-weight     : 500;
-  font-family     : inherit;
-  background-color: #1a1a1a;
-  cursor          : pointer;
-  transition      : border-color 0.25s;
-}
-
-button:hover {
-  border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  font-size: 12px;
 }
 
 form .form-group {
@@ -134,28 +163,13 @@ form .form-group {
 }
 
 form .invalid-feedback {
-    width: fit-content;
-    margin: 0 auto;
-    font-size: 12px;
-    background: #fff;
-    padding: 0 5px;
-    position: absolute;
-    top: -10px;
-    left: 8px;
-    right: 8px;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color           : #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
+  width     : fit-content;
+  margin    : 0 auto;
+  font-size : 12px;
+  background: #fff;
+  padding   : 0 5px;
+  position  : absolute;
+  top       : -10px;
+  left      : 8px;
+  right     : 8px;
 }

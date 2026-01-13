@@ -11,14 +11,11 @@ import { LoadingProvider } from "./contexts/LoadingContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./components/Layout";
 import { LocaleProvider } from "./contexts/LocaleContext";
-// import AppRoutes from "./AppRoutes";
 
-// Pages
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Posts from "./pages/Posts";
 
-// Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
