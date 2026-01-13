@@ -6,8 +6,10 @@ import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import Table from 'react-bootstrap/Table';
+import { useTranslations } from '../hooks/useTranslations';
 
 const Dashboard = () => {
+  const { t } = useTranslations();
   const [stats, setStats] = useState({
     posts: 0,
     pages: 0,
@@ -26,7 +28,6 @@ const Dashboard = () => {
     try {
       setLoading(true);
       
-      // Получаем данные параллельно
       const [postsRes, pagesRes, tagsRes, employeesRes] = await Promise.allSettled([
         publicAPI.getPosts({ limit: 5 }),
         publicAPI.getPages(),
@@ -66,7 +67,7 @@ const Dashboard = () => {
     return (
       <div className="d-flex justify-content-center my-5">
         <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">{t('common.loading')}</span>
         </Spinner>
       </div>
     );
@@ -74,7 +75,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <h3 className="mb-4">Dashboard</h3>
+      <h3 className="mb-4">{t('dashboard.panel.dashboard.title')}</h3>
       
       {error && (
         <Alert variant="danger" className="mb-4">
@@ -136,7 +137,7 @@ const Dashboard = () => {
       {/* Последние посты */}
       <Card className="mb-4">
         <Card.Header>
-          <h5 className="mb-0">Recent Posts</h5>
+        <h5 className="mb-0">{t('dashboard.panel.dashboard.recent_posts')}</h5>
         </Card.Header>
         <Card.Body>
           {recentPosts.length > 0 ? (

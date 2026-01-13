@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
+import ukTranslations from '../locales/uk.json';
+let enTranslations = null;
+
 const LocaleContext = createContext({});
 
 export const useLocale = () => {
@@ -15,76 +18,69 @@ export const LocaleProvider = ({ children }) => {
     return localStorage.getItem('locale') || 'uk';
   });
   
-  const [translations, setTranslations] = useState({});
+  const [translations, setTranslations] = useState(() => ({
+    uk: ukTranslations,
+    en: null
+  }));
+  
   const [isLoading, setIsLoading] = useState(false);
 
-  // Загружаем переводы при изменении языка
   useEffect(() => {
-    loadTranslations(locale);
-  }, [locale]);
+    if (locale === 'en' && !translations.en) {
+      loadEnglishTranslations();
+    }
+  }, [locale, translations.en]);
 
-  const loadTranslations = async (lang) => {
+  const loadEnglishTranslations = async () => {
     setIsLoading(true);
     try {
-      // Загружаем файлы переводов для выбранного языка
-      const modules = await Promise.all([
-        import(`../locales/${lang}/menu.json`),
-        import(`../locales/${lang}/auth.json`),
-        import(`../locales/${lang}/common.json`),
-        // Добавьте другие файлы по необходимости
-      ]);
-      
-      const [menu, auth, common] = modules;
-      
-      setTranslations({
-        menu: menu.default,
-        auth: auth.default,
-        common: common.default
-      });
-      
+      const module = await import('../locales/en.json');
+      setTranslations(prev => ({
+        ...prev,
+        en: module.default
+      }));
     } catch (error) {
-      console.error('Failed to load translations:', error);
-      // Fallback на украинский если не удалось загрузить
-      if (lang !== 'uk') {
-        try {
-          const fallbackModules = await Promise.all([
-            import('../locales/uk/menu.json'),
-            import('../locales/uk/auth.json'),
-            import('../locales/uk/common.json'),
-          ]);
-          
-          const [menu, auth, common] = fallbackModules;
-          
-          setTranslations({
-            menu: menu.default,
-            auth: auth.default,
-            common: common.default
-          });
-        } catch (fallbackError) {
-          console.error('Fallback translations failed:', fallbackError);
-        }
-      }
+      console.error('Failed to load English translations:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const t = useCallback((key, namespace = 'common') => {
-    if (isLoading) return key;
-    
+  const t = useCallback((key) => {
     const keys = key.split('.');
-    let value = translations[namespace];
+    
+    let currentTranslations = translations[locale];
+    
+    if (!currentTranslations) {
+      currentTranslations = translations.uk;
+    }
+    
+    let value = currentTranslations;
     
     for (const k of keys) {
-      value = value?.[k];
-      if (value === undefined) {
-        console.warn(`Translation missing for ${namespace}.${key}`);
-        return key;
+      if (value && typeof value === 'object' && k in value) {
+        value = value[k];
+      } else {
+        let ukValue = translations.uk;
+        for (const k2 of keys) {
+          if (ukValue && typeof ukValue === 'object' && k2 in ukValue) {
+            ukValue = ukValue[k2];
+          } else {
+            console.warn(`Translation missing: ${key}`);
+            return key;
+          }
+        }
+        return ukValue;
       }
     }
     
-    return value;
-  }, [translations, isLoading]);
+    if (typeof value === 'string') {
+      return value;
+    }
+    
+    console.warn(`Translation returns object for key: ${key}`);
+    return key;
+  }, [translations, locale]);
 
   const changeLocale = useCallback(async (newLocale) => {
     if (newLocale !== locale && ['uk', 'en'].includes(newLocale)) {
@@ -97,7 +93,8 @@ export const LocaleProvider = ({ children }) => {
     locale,
     t,
     changeLocale,
-    isLoading
+    isLoading: locale === 'en' && !translations.en,
+    isLoaded: true
   };
 
   return (

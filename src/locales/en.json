@@ -1,0 +1,93 @@
+{
+  "common": {
+    "app_name": "Estate Admin",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "confirm": "Confirm",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "email": "Enter email",
+      "password": "Enter password",
+      "submit": "Login",
+      "enter": "Signing in...",
+      "forgot_password": "Forgot password?",
+      "errors": {
+        "required": "This field is required",
+        "required_email": "Email is required",
+        "required_password": "Password is required",
+        "invalid_email": "Invalid email address",
+        "invalid_credentials": "Invalid email or password",
+        "no_entry": "Failed to login",
+        "invalid_login": "An error occurred during login"
+      }
+    },
+    "profile": {
+      "menu": "Profile",
+      "title": "Edit Profile"
+    },
+    "logout": {
+      "menu": "Logout"
+    }
+  },
+  
+  "menu": {
+    "dashboard": "Dashboard",
+    "posts": "Posts",
+    "pages": "Pages",
+    "tags": "Tags",
+    "employees": "Employees",
+    "testimonials": "Testimonials",
+    "partners": "Partners",
+    "menus": "Menus",
+    "settings": "Settings",
+    "users": "Users"
+  },
+  
+  "dashboard": {
+    "panel": {
+      "dashboard": {
+        "title": "Dashboard",
+        "recent_posts": "Recent Posts"
+      },
+      "menus": {
+        "title": "Menus"
+      },
+      "posts": {
+        "title": "Posts"
+      },
+      "pages": {
+        "title": "Pages"
+      },
+      "tags": {
+        "title": "Tags"
+      },
+      "employees": {
+        "title": "Employees"
+      },
+      "testimonials": {
+        "title": "Testimonials"
+      },
+      "partners": {
+        "title": "Partners"
+      },
+      "users": {
+        "title": "Users"
+      },
+      "settings": {
+        "title": "Settings"
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "common": {
+    "app_name": "Estate Admin",
+    "loading": "Завантаження...",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "edit": "Редагувати",
+    "add": "Додати",
+    "search": "Пошук",
+    "confirm": "Підтвердити",
+    "success": "Успіх",
+    "error": "Помилка",
+    "warning": "Попередження",
+    "info": "Інформація"
+  },
+  
+  "auth": {
+    "login": {
+      "title": "Вхід в систему",
+      "email": "Введіть e-mail",
+      "password": "Введіть пароль",
+      "submit": "Авторизація",
+      "enter": "Вхід...",
+      "forgot_password": "Забули пароль?",
+      "errors": {
+        "required": "Це поле обов'язкове",
+        "required_email": "Потрібен e-mail",
+        "required_password": "Потрібен пароль",
+        "invalid_email": "Недійсна електронна адреса",
+        "invalid_credentials": "Невірний email або пароль",
+        "no_entry": "Не вдалося ввійти",
+        "invalid_login": "Під час входу сталася помилка"
+      }
+    },
+    "profile": {
+      "menu": "Профіль",
+      "title": "Редагування профілю"
+    },
+    "logout": {
+      "menu": "Вийти"
+    }
+  },
+  
+  "menu": {
+    "dashboard": "Панель",
+    "posts": "Публікації",
+    "pages": "Сторінки",
+    "tags": "Теги",
+    "employees": "Співробітники",
+    "testimonials": "Відгуки",
+    "partners": "Партнери",
+    "menus": "Меню",
+    "settings": "Налаштування",
+    "users": "Користувачі"
+  },
+  
+  "dashboard": {
+    "panel": {
+      "dashboard": {
+        "title": "Панель",
+        "recent_posts": "Недавні публікації"
+      },
+      "menus": {
+        "title": "Меню"
+      },
+      "posts": {
+        "title": "Публікації"
+      },
+      "pages": {
+        "title": "Сторінки"
+      },
+      "tags": {
+        "title": "Теги"
+      },
+      "employees": {
+        "title": "Співробітники"
+      },
+      "testimonials": {
+        "title": "Відгуки"
+      },
+      "partners": {
+        "title": "Партнери"
+      },
+      "users": {
+        "title": "Користувачі"
+      },
+      "settings": {
+        "title": "Налаштування"
+      }
+    }
+  }
+}

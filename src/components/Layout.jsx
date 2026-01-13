@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Container from "react-bootstrap/Container";
@@ -9,20 +9,19 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
 import Toast from "react-bootstrap/Toast";
 import useStore from "../store/useStore";
-import { useMenuTranslations } from "../hooks/useTranslations";
-import { useLocale } from "../contexts/LocaleContext";
+import { useTranslations } from "../hooks/useTranslations";
 
 import Logo from "../assets/logo-w.svg";
 import Avatar from "../assets/no-avatar.svg";
 
 const Layout = () => {
-  const { user, logout, hasPermission, userRole } = useAuth();
+  const { user, logout, userRole } = useAuth();
   const navigate = useNavigate();
   const [showSidebar, setShowSidebar] = useState(false);
   const { notifications, removeNotification } = useStore();
   const { tokenWillExpireSoon, formatTimeLeft } = useAuth();
   const [showExpiryWarning, setShowExpiryWarning] = useState(false);
-  const { t, locale, changeLocale, isLoading } = useMenuTranslations(); // Получаем все из хука
+  const { t, locale, changeLocale, isLoading } = useTranslations();
 
   const handleLogout = async () => {
     await logout();
@@ -44,8 +43,7 @@ const Layout = () => {
     return () => clearInterval(interval);
   }, [tokenWillExpireSoon]);
 
-  // Обновляем menuItems при изменении языка
-  const menuItems = React.useMemo(() => [
+  const menuItems = useMemo(() => [
     { path: "/", label: t("menu.dashboard"), icon: "speedometer2", visible: true },
     {
       path: "/menus",
@@ -91,21 +89,17 @@ const Layout = () => {
       icon: "gear",
       visible: userRole === "admin" || userRole === "superadmin",
     },
-  ], [t, userRole]); // Зависимость от t и userRole
+  ], [t, userRole]);
 
-  // Функция для переключения языка
   const handleLanguageChange = async (newLocale) => {
     await changeLocale(newLocale);
-    // Принудительное обновление компонента
-    // Не нужно - React сам перерендерит из-за изменения состояния
   };
 
-  // Показываем индикатор загрузки если переводы еще не загружены
   if (isLoading) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
         <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading translations...</span>
+          <span className="visually-hidden">{t("common.loading")}</span>
         </div>
       </div>
     );
@@ -167,7 +161,6 @@ const Layout = () => {
                   </Button>
 
                   <Nav className="ms-auto">
-                    {/* Селектор языка с обработкой клика */}
                     <NavDropdown
                       title={
                         <span>
@@ -205,12 +198,12 @@ const Layout = () => {
                     >
                       <NavDropdown.Item as={Link} to="#">
                         <i className="bi bi-person me-2"></i>
-                        Profile
+                        {t("auth.profile.menu")}
                       </NavDropdown.Item>
                       <NavDropdown.Divider />
                       <NavDropdown.Item onClick={handleLogout}>
                         <i className="bi bi-box-arrow-right me-2"></i>
-                        Logout
+                        {t("auth.logout.menu")}
                       </NavDropdown.Item>
                     </NavDropdown>
                   </Nav>

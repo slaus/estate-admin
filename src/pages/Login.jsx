@@ -5,11 +5,11 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
-import { useAuthTranslations } from '../hooks/useTranslations';
+import { useTranslations } from '../hooks/useTranslations';
 import Logo from '../assets/logo.svg';
 
 const Login = () => {
-  const { t } = useAuthTranslations();
+  const { t } = useTranslations();
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -29,7 +29,6 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error for this field
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -42,13 +41,13 @@ const Login = () => {
     const newErrors = {};
     
     if (!credentials.email.trim()) {
-      newErrors.email = t('login.errors.required_email');
+      newErrors.email = t('auth.login.errors.required_email');
     } else if (!/\S+@\S+\.\S+/.test(credentials.email)) {
-      newErrors.email = t('login.errors.invalid_email');
+      newErrors.email = t('auth.login.errors.invalid_email');
     }
     
     if (!credentials.password) {
-      newErrors.password = t('login.errors.required_password');
+      newErrors.password = t('auth.login.errors.required_password');
     }
     
     return newErrors;
@@ -72,11 +71,11 @@ const Login = () => {
       if (result.success) {
         navigate(from, { replace: true });
       } else {
-        setErrors({ general: result.message || t('login.errors.no_entry') });
+        setErrors({ general: result.message || t('auth.login.errors.no_entry') });
       }
     } catch (error) {
       setErrors({ 
-        general: error.message || t('login.errors.invalid_login')
+        general: error.message || t('auth.login.errors.invalid_login')
       });
     } finally {
       setLoading(false);
@@ -90,7 +89,7 @@ const Login = () => {
           <div className="mb-4">
             <img src={Logo} alt="Logo" width="180" />
           </div>
-          <h4 className="mb-3">{t('login.title')}</h4>
+          <h4 className="mb-3">{t('auth.login.title')}</h4>
           {errors.general && (
             <Alert variant="danger" dismissible onClose={() => setErrors({})}>
               {errors.general}
@@ -105,7 +104,7 @@ const Login = () => {
                 value={credentials.email}
                 onChange={handleChange}
                 isInvalid={!!errors.email}
-                placeholder={t('login.email')}
+                placeholder={t('auth.login.email')}
                 className='text-center'
               />
               <Form.Control.Feedback type="invalid">
@@ -120,7 +119,7 @@ const Login = () => {
                 value={credentials.password}
                 onChange={handleChange}
                 isInvalid={!!errors.password}
-                placeholder={t('login.password')}
+                placeholder={t('auth.login.password')}
                 className='text-center'
               />
               <Form.Control.Feedback type="invalid">
@@ -145,12 +144,12 @@ const Login = () => {
               {loading ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  {t('login.enter')}
+                  {t('auth.login.enter')}
                 </>
               ) : (
                 <>
                   <i className="bi bi-box-arrow-in-right me-2"></i>
-                  {t('login.submit')}
+                  {t('auth.login.submit')}
                 </>
               )}
             </Button>
@@ -162,7 +161,7 @@ const Login = () => {
               style={{cursor: 'pointer'}}
               onClick={() => {/* Логика восстановления пароля */}}
             >
-              {t('login.forgot_password')}
+              {t('auth.login.forgot_password')}
             </small>
           </div>
 
