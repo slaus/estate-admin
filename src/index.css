@@ -37,7 +37,7 @@ h1 {
 .layout {
   display         : flex;
   flex-direction  : column;
-  background-color: #f8f9fc;
+  background-color: #ededed;
   width           : 100%;
   overflow-x      : hidden;
 }
@@ -148,6 +148,17 @@ h1 {
   align-items: center;
   gap        : 10px;
   height     : 100%;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: contain;
 }
 
 .nav-item .menu .user {

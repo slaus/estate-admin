@@ -42,13 +42,20 @@
       "password_re": "Повтор нового пароля",
       "avatar_new": "Новий аватар",
       "avatar_delete": "Видалити аватар",
+      "change_avatar": "Змінити аватар",
+      "change_password": "Змінити пароль",
+      "avatar_hint": "Натисніть камеру для завантаження нового аватара",
+      "avatar_updated": "Аватар успішно оновлено",
+      "avatar_updateError": "Не вдалося оновити аватар",
+      "avatar_removed": "Аватар видалено",
+      "avatar_removeError": "Не вдалося видалити аватар",
+      "password_updated": "Пароль успішно змінено",
+      "password_updateError": "Не вдалося змінити пароль",
+      "updated": "Профіль успішно оновлено",
+      "updateError": "Не вдалося оновити профіль",
       "errors": {
         "current_err": "Обов'язково введіть поточний пароль",
-        "required": "Це поле обов'язкове",
-        "required_email": "Потрібен e-mail",
-        "required_password": "Потрібен пароль",
-        "passwords": "Паролі повинні співпадати",
-        "invalid_login": "Під час збереження сталася помилка"
+        "passwords": "Паролі повинні співпадати"
       }
     },
     "logout": {

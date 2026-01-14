@@ -33,14 +33,12 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem('token_expires_at');
   });
 
-  // АВТОМАТИЧЕСКАЯ ПРОВЕРКА ИСТЕЧЕНИЯ ТОКЕНА
   useEffect(() => {
     checkAuth();
     
-    // Проверяем каждую минуту, не истек ли токен
     const expirationCheckInterval = setInterval(() => {
       if (tokenExpiresAt && new Date(tokenExpiresAt) < new Date()) {
-        console.log('Token expired automatically, logging out...');
+        // console.log('Token expired automatically, logging out...');
         handleCleanLogout();
         window.location.href = '/login?reason=expired';
       }
@@ -59,17 +57,38 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await authAPI.getUser();
       if (result.success && result.user) {
-        setUser(result.user);
+        console.log('=== CHECK AUTH SUCCESS ===');
+        console.log('User data from /user endpoint:', result.user);
+        console.log('Avatar from /user endpoint:', result.user?.avatar);
+        
+        // Обрабатываем avatar URL
+        const userData = { ...result.user };
+        
+        // Убедимся что avatar обрабатывается
+        if (userData.avatar && userData.avatar.startsWith('/') && !userData.avatar.startsWith('http')) {
+          const baseUrl = import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://estate-backend.test';
+          userData.avatar = baseUrl + userData.avatar;
+          console.log('Processed avatar URL:', userData.avatar);
+        } else if (!userData.avatar) {
+          console.log('WARNING: avatar is missing in response!');
+        }
+        
+        setUser(userData);
+        
+        // Сохраняем в localStorage
+        localStorage.setItem('user', JSON.stringify(userData));
+        
         if (result.token_expires_at) {
           localStorage.setItem('token_expires_at', result.token_expires_at);
           setTokenExpiresAt(result.token_expires_at);
         }
       } else {
+        console.log('Auth failed, cleaning up');
         handleCleanLogout();
       }
     } catch (error) {
+      console.error('Auth check error:', error);
       if (error.expired) {
-        // Токен истек на сервере
         handleCleanLogout();
       } else {
         console.error('Auth check failed:', error);
@@ -93,16 +112,18 @@ export const AuthProvider = ({ children }) => {
       const result = await authAPI.login(credentials);
       
       if (result.success && result.token) {
-        // СОХРАНЯЕМ ВСЕ ДАННЫЕ О ТОКЕНЕ
-        localStorage.setItem('auth_token', result.token);
-        localStorage.setItem('user', JSON.stringify(result.user));
+        console.log('=== LOGIN SUCCESS ===');
+        console.log('User data from API:', result.user);
+        console.log('Avatar from API:', result.user?.avatar);
+        
+        // Обновляем пользователя в контексте и localStorage
+        setUser(result.user);
         
         if (result.expires_at) {
           localStorage.setItem('token_expires_at', result.expires_at);
           setTokenExpiresAt(result.expires_at);
         }
         
-        setUser(result.user);
         return { success: true };
       } else {
         return { 
@@ -130,7 +151,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ПОЛЕЗНЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ СО ВРЕМЕНЕМ
   const getTokenTimeLeft = useCallback(() => {
     if (!tokenExpiresAt) return 0;
     const expires = new Date(tokenExpiresAt);
@@ -174,10 +194,18 @@ export const AuthProvider = ({ children }) => {
       const result = await authAPI.updateProfile(profileData);
       
       if (result.success && result.user) {
+        const userData = { ...result.user };
+        
+        if (userData.avatar && userData.avatar.startsWith('/') && !userData.avatar.startsWith('http')) {
+          const baseUrl = import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://estate-backend.test';
+          userData.avatar = baseUrl + userData.avatar;
+        }
+        
         // Обновляем пользователя в контексте и localStorage
-        setUser(result.user);
-        localStorage.setItem('user', JSON.stringify(result.user));
-        return { success: true, user: result.user };
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        
+        return { success: true, user: userData };
       } else {
         return { 
           success: false, 
@@ -186,6 +214,7 @@ export const AuthProvider = ({ children }) => {
         };
       }
     } catch (error) {
+      console.error('Update profile error:', error);
       return { 
         success: false, 
         message: error.message || 'An error occurred' 

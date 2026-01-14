@@ -59,9 +59,18 @@ const Layout = () => {
   return (
     <>
       <div className="d-flex">
-        <Sidebar userRole={user?.role} onItemClick={() => {}} showSidebar={showSidebar} />
+        <Sidebar
+          userRole={user?.role}
+          onItemClick={() => {}}
+          showSidebar={showSidebar}
+        />
         <div className="layout">
-          <Navbar bg="light" variant="light" expand="lg" className="navbar navbar-expand topbar mb-4 static-top shadow">
+          <Navbar
+            bg="light"
+            variant="light"
+            expand="lg"
+            className="navbar navbar-expand topbar mb-4 static-top shadow"
+          >
             <Container fluid className="p-0 px-3">
               <Button
                 variant="light"
@@ -92,11 +101,13 @@ const Layout = () => {
                 <NavDropdown
                   title={
                     <div className="d-flex align-items-center gap-2 menu">
-                      <img
-                        src={user?.avatar || Avatar}
-                        alt={user?.name || "User"}
-                        width="35"
-                      />
+                      <div className="avatar">
+                        <img
+                          src={user?.avatar || Avatar}
+                          alt={user?.name || "User"}
+                          width="35"
+                        />
+                      </div>
                       <div className="d-flex flex-column gap-0">
                         <span className="user">{user?.name || "User"}</span>
                         <span className="email">{user?.email || "Email"}</span>
