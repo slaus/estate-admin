@@ -149,7 +149,7 @@ const Menus = () => {
                             </Badge>
                           ))
                         ) : (
-                          <span className="text-muted">Без тегів</span>
+                          <span className="text-muted">{t("common.no_tags")}</span>
                         )}
                       </td>
                       <td><small>{new Date(menu.created_at).toLocaleDateString()}</small></td>

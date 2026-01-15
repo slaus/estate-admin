@@ -12,13 +12,13 @@ export const useMenuItems = (userRole) => {
       icon: "menu-app",
       visible: userRole === "admin" || userRole === "superadmin",
     },
-    { path: "/posts", label: t("menu.posts"), icon: "newspaper", visible: true },
     {
       path: "/pages",
       label: t("menu.pages"),
       icon: "file-earmark-text",
       visible: true,
     },
+    { path: "/posts", label: t("menu.posts"), icon: "newspaper", visible: true },
     { path: "/tags", label: t("menu.tags"), icon: "tags", visible: true },
     {
       path: "/employees",

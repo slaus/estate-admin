@@ -14,6 +14,8 @@ import { LocaleProvider } from "./contexts/LocaleContext";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Menus from "./pages/Menus";
+import Pages from "./pages/Pages";
 import Posts from "./pages/Posts";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -37,6 +39,8 @@ function App() {
                 }
               >
                 <Route index element={<Dashboard />} />
+                <Route path="menus" element={<Menus />} />
+                <Route path="pages" element={<Pages />} />
                 <Route path="posts" element={<Posts />} />
               </Route>
 
