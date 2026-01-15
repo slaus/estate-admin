@@ -159,6 +159,22 @@ export const postsAPI = {
   delete: (id) => api.delete(`/admin/posts/${id}`),
 };
 
+export const adminsAPI = {
+  getAll: (params) => api.get('/admin/admins', { params }),
+  getOne: (id) => api.get(`/admin/admins/${id}`),
+  create: (data) => api.post('/admin/admins', data),
+  update: (id, data) => api.put(`/admin/admins/${id}`, data),
+  delete: (id) => api.delete(`/admin/admins/${id}`),
+};
+
+export const usersAPI = {
+  getAll: (params) => api.get('/admin/users', { params }),
+  getOne: (id) => api.get(`/admin/users/${id}`),
+  create: (data) => api.post('/admin/users', data),
+  update: (id, data) => api.put(`/admin/users/${id}`, data),
+  delete: (id) => api.delete(`/admin/users/${id}`),
+};
+
 export const pagesAPI = {
   getAll: (params) => api.get('/admin/pages', { params }),
   getList: () => api.get('/admin/pages/list'),

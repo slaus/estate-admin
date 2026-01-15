@@ -39,10 +39,16 @@ export const useMenuItems = (userRole) => {
       visible: true,
     },
     {
+      path: "/admins",
+      label: t("menu.admins"),
+      icon: "shield-lock",
+      visible: userRole === "superadmin",
+    },
+    {
       path: "/users",
       label: t("menu.users"),
-      icon: "people-fill",
-      visible: userRole === "superadmin",
+      icon: "people",
+      visible: userRole === "admin" || userRole === "superadmin",
     },
     {
       path: "/settings",

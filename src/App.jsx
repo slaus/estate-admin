@@ -17,6 +17,8 @@ import Dashboard from "./pages/Dashboard";
 import Menus from "./pages/Menus";
 import Pages from "./pages/Pages";
 import Posts from "./pages/Posts";
+import Admins from "./pages/Admins";
+import Users from "./pages/Users";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -42,6 +44,8 @@ function App() {
                 <Route path="menus" element={<Menus />} />
                 <Route path="pages" element={<Pages />} />
                 <Route path="posts" element={<Posts />} />
+                <Route path="admins" element={<Admins />} />
+                <Route path="users" element={<Users />} />
               </Route>
 
               <Route path="*" element={<Navigate to="/" />} />
