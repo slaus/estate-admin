@@ -150,6 +150,14 @@ h1 {
   height     : 100%;
 }
 
+table tr.off {
+  opacity: .5;
+}
+
+form label {
+  font-weight: 600;
+}
+
 .avatar {
   width: 35px;
   height: 35px;

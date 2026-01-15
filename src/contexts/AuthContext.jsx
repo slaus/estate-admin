@@ -57,9 +57,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await authAPI.getUser();
       if (result.success && result.user) {
-        console.log('=== CHECK AUTH SUCCESS ===');
-        console.log('User data from /user endpoint:', result.user);
-        console.log('Avatar from /user endpoint:', result.user?.avatar);
+        // console.log('=== CHECK AUTH SUCCESS ===');
+        // console.log('User data from /user endpoint:', result.user);
+        // console.log('Avatar from /user endpoint:', result.user?.avatar);
         
         // Обрабатываем avatar URL
         const userData = { ...result.user };
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
         if (userData.avatar && userData.avatar.startsWith('/') && !userData.avatar.startsWith('http')) {
           const baseUrl = import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://estate-backend.test';
           userData.avatar = baseUrl + userData.avatar;
-          console.log('Processed avatar URL:', userData.avatar);
+          // console.log('Processed avatar URL:', userData.avatar);
         } else if (!userData.avatar) {
           console.log('WARNING: avatar is missing in response!');
         }
@@ -112,9 +112,9 @@ export const AuthProvider = ({ children }) => {
       const result = await authAPI.login(credentials);
       
       if (result.success && result.token) {
-        console.log('=== LOGIN SUCCESS ===');
-        console.log('User data from API:', result.user);
-        console.log('Avatar from API:', result.user?.avatar);
+        // console.log('=== LOGIN SUCCESS ===');
+        // console.log('User data from API:', result.user);
+        // console.log('Avatar from API:', result.user?.avatar);
         
         // Обновляем пользователя в контексте и localStorage
         setUser(result.user);

@@ -44,9 +44,8 @@ const ProfileForm = ({
           />
           <div className="mt-2">
             <Button 
-              variant="link" 
+              variant="danger" 
               size="sm"
-              className="text-decoration-none p-0"
               onClick={onAvatarClick}
             >
               {t("auth.profile.change_avatar")}
@@ -61,8 +60,8 @@ const ProfileForm = ({
       </div>
 
       <Form>
-        <Form.Group className="mb-3">
-          <Form.Label className="small text-muted">
+        <Form.Group className="mb-3 form-group text-center">
+          <Form.Label className="small">
             {t('auth.profile.name_new')}
           </Form.Label>
           <Form.Control
@@ -81,7 +80,7 @@ const ProfileForm = ({
 
         <div className="d-grid gap-2 mt-4">
           <Button 
-            variant="outline-secondary" 
+            variant="primary" 
             onClick={onPasswordClick}
             className="d-flex align-items-center justify-content-center gap-2"
           >

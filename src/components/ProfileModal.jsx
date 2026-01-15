@@ -387,7 +387,7 @@ const ProfileModal = ({ show, onHide }) => {
             {t("common.cancel")}
           </Button>
           <Button 
-            variant="primary" 
+            variant="danger" 
             onClick={handleSaveProfile}
             disabled={loading}
           >

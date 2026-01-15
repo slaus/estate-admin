@@ -5,12 +5,10 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
 import { useTranslations } from "../hooks/useTranslations";
 import ProfileModal from "../components/ProfileModal";
 
-import Logo from "../assets/logo-w.svg";
 import Avatar from "../assets/no-avatar.svg";
 import Sidebar from "./Sidebar";
 import Loading from "./Loading";

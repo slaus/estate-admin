@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { postsAPI } from "../api/services";
+import { menusAPI } from "../api/services";
 import useStore from "../store/useStore";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
@@ -11,85 +11,85 @@ import { useTranslations } from "../hooks/useTranslations";
 import Loading from "../components/Loading";
 import Search from "../components/Search";
 
-const Posts = () => {
+const Menus = () => {
   const { t } = useTranslations();
   const { addNotification } = useStore();
-  const [posts, setPosts] = useState([]);
-  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [menus, setMenus] = useState([]);
+  const [filteredMenus, setFilteredMenus] = useState([]);
   const [search, setSearch] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const postsPerPage = 10;
+  const menusPerPage = 10;
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPosts();
+    fetchMenus();
   }, []);
 
   useEffect(() => {
-    const filtered = posts.filter(
-      (post) =>
-        post.title.toLowerCase().includes(search.toLowerCase()) ||
-        post.slug.toLowerCase().includes(search.toLowerCase())
+    const filtered = menus.filter(
+      (menu) =>
+        menu.title.toLowerCase().includes(search.toLowerCase()) ||
+        menu.slug.toLowerCase().includes(search.toLowerCase())
     );
-    setFilteredPosts(filtered);
-    setTotalPages(Math.ceil(filtered.length / postsPerPage));
+    setFilteredMenus(filtered);
+    setTotalPages(Math.ceil(filtered.length / menusPerPage));
     setCurrentPage(1);
-  }, [search, posts]);
+  }, [search, menus]);
 
-  const fetchPosts = async () => {
+  const fetchMenus = async () => {
     setLoading(true);
     try {
-      const response = await postsAPI.getAll();
-      setPosts(response.data);
+      const response = await menusAPI.getAll();
+      setMenus(response.data);
       addNotification({
         type: "success",
-        message: "Posts loaded successfully",
+        message: "Menus loaded successfully",
       });
     } catch (error) {
       addNotification({
         type: "error",
-        message: "Failed to load posts",
+        message: "Failed to load menus",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteClick = (post) => {
-    setSelectedPost(post);
+  const handleDeleteClick = (menu) => {
+    setSelectedMenu(menu);
     setShowDeleteModal(true);
   };
 
   const handleDeleteConfirm = async () => {
-    if (!selectedPost) return;
+    if (!selectedMenu) return;
 
     setLoading(true);
 
     try {
-      await postsAPI.delete(selectedPost.id);
-      setPosts(posts.filter((p) => p.id !== selectedPost.id));
+      await menusAPI.delete(selectedMenu.id);
+      setMenus(menus.filter((p) => p.id !== selectedMenu.id));
       addNotification({
         type: "success",
-        message: "Post deleted successfully",
+        message: "Menu deleted successfully",
       });
     } catch (error) {
       addNotification({
         type: "error",
-        message: "Failed to delete post",
+        message: "Failed to delete menu",
       });
     } finally {
       setLoading(false);
       setShowDeleteModal(false);
-      setSelectedPost(null);
+      setSelectedMenu(null);
     }
   };
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const indexOfLastMenu = currentPage * menusPerPage;
+  const indexOfFirstMenu = indexOfLastMenu - menusPerPage;
+  const currentMenus = filteredMenus.slice(indexOfFirstMenu, indexOfLastMenu);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -101,11 +101,11 @@ const Posts = () => {
     <>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="h4 mb-4 text-gray-800">
-          {t("dashboard.panel.posts.title")}
+          {t("dashboard.panel.menus.title")}
         </h1>
-        <Button variant="secondary" href="/posts/new">
+        <Button variant="secondary" href="/menus/new">
           <i className="bi bi-plus-circle me-2"></i>
-          {t("dashboard.panel.posts.new")}
+          {t("dashboard.panel.menus.new")}
         </Button>
       </div>
 
@@ -113,7 +113,7 @@ const Posts = () => {
 
       <Card>
         <Card.Body>
-          {currentPosts.length > 0 ? (
+          {currentMenus.length > 0 ? (
             <>
               <Table hover responsive>
                 <thead>
@@ -128,22 +128,22 @@ const Posts = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentPosts.map((post) => (
-                    <tr key={post.id} className={post?.visibility ? '' : 'off'}>
-                      <td>{post.id}</td>
+                  {currentMenus.map((menu) => (
+                    <tr key={menu.id} className={menu?.visibility ? '' : 'off'}>
+                      <td>{menu.id}</td>
                       <td>
-                        <strong>{post.title}</strong>
-                        {post.excerpt && (
-                          <div className="text-muted small">{post.excerpt}</div>
+                        <strong>{menu.title}</strong>
+                        {menu.excerpt && (
+                          <div className="text-muted small">{menu.excerpt}</div>
                         )}
                       </td>
-                      <td><i className={`bi bi-${post?.visibility ? 'toggle-on' : 'toggle-off'}`}></i></td>
+                      <td><i className={`bi bi-${menu?.visibility ? 'toggle-on' : 'toggle-off'}`}></i></td>
                       <td>
-                        <code>{post.slug}</code>
+                        <code>{menu.slug}</code>
                       </td>
                       <td>
-                        {post.tags && post.tags.length > 0 ? (
-                          post.tags.map((tag) => (
+                        {menu.tags && menu.tags.length > 0 ? (
+                          menu.tags.map((tag) => (
                             <Badge key={tag.id} bg="primary" className="me-1 small">
                               {tag.name}
                             </Badge>
@@ -152,20 +152,20 @@ const Posts = () => {
                           <span className="text-muted">Без тегів</span>
                         )}
                       </td>
-                      <td><small>{new Date(post.created_at).toLocaleDateString()}</small></td>
+                      <td><small>{new Date(menu.created_at).toLocaleDateString()}</small></td>
                       <td>
                         <div className="btn-group" role="group">
                           <Button
                             variant="primary"
                             size="sm"
-                            href={`/posts/edit/${post.id}`}
+                            href={`/menus/edit/${menu.id}`}
                           >
                             <i className="bi bi-pencil"></i>
                           </Button>
                           <Button
                             variant="danger"
                             size="sm"
-                            onClick={() => handleDeleteClick(post)}
+                            onClick={() => handleDeleteClick(menu)}
                           >
                             <i className="bi bi-trash"></i>
                           </Button>
@@ -213,14 +213,14 @@ const Posts = () => {
           ) : (
             <div className="text-center py-5">
               <i className="bi bi-newspaper fs-1 text-muted mb-3 d-block"></i>
-              <h5>{t("dashboard.panel.posts.not_found")}</h5>
+              <h5>{t("dashboard.panel.menus.not_found")}</h5>
               <p className="text-muted">
                 {search
-                  ? t("dashboard.panel.posts.try_found")
-                  : t("dashboard.panel.posts.no_post")}
+                  ? t("dashboard.panel.menus.try_found")
+                  : t("dashboard.panel.menus.no_menu")}
               </p>
-              <Button variant="secondary" href="/posts/new">
-                {t("dashboard.panel.posts.try_new")}
+              <Button variant="secondary" href="/menus/new">
+                {t("dashboard.panel.menus.try_new")}
               </Button>
             </div>
           )}
@@ -233,8 +233,8 @@ const Posts = () => {
           <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete post "
-          <strong>{selectedPost?.title}</strong>"? This action cannot be undone.
+          Are you sure you want to delete menu "
+          <strong>{selectedMenu?.title}</strong>"? This action cannot be undone.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
@@ -249,4 +249,4 @@ const Posts = () => {
   );
 };
 
-export default Posts;
+export default Menus;

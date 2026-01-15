@@ -88,7 +88,7 @@ const AvatarForm = ({
           {t("common.cancel")}
         </Button>
         <Button 
-          variant="primary" 
+          variant="danger" 
           onClick={onSave}
           disabled={loading || !avatarFile}
         >

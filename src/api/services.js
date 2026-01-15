@@ -6,10 +6,8 @@ export const authAPI = {
       const response = await api.post('/login', credentials);
       
       if (response.token) {
-        // Обрабатываем avatar URL
         const userData = { ...response.user };
         
-        // Если avatar есть и это относительный путь, добавляем базовый URL
         if (userData.avatar && userData.avatar.startsWith('/') && !userData.avatar.startsWith('http')) {
           const baseUrl = import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://estate-backend.test';
           userData.avatar = baseUrl + userData.avatar;
@@ -20,7 +18,7 @@ export const authAPI = {
         
         return { 
           success: true, 
-          user: userData, // ← Используем обработанные данные
+          user: userData,
           token: response.token 
         };
       } else {
@@ -224,7 +222,7 @@ export const publicAPI = {
   getEmployees: () => api.get('/employees'),
   getTestimonials: () => api.get('/testimonials'),
   getPartners: () => api.get('/partners'),
-  getMenus: () => api.get('/menus'),
+  getMenus: (params) => api.get('/menus', { params }),
   getSettings: (group) => api.get(`/settings/${group}`),
   getAllSettings: () => api.get('/settings'),
 };

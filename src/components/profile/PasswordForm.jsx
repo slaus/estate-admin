@@ -27,10 +27,7 @@ const PasswordForm = ({
         </Alert>
       )}
       
-      <Form.Group className="mb-3">
-        <Form.Label className="small text-muted">
-          {t('auth.profile.password')}
-        </Form.Label>
+      <Form.Group className="mb-3 form-group">
         <Form.Control
           type="password"
           name="password_current"
@@ -45,10 +42,7 @@ const PasswordForm = ({
         </Form.Control.Feedback>
       </Form.Group>
 
-      <Form.Group className="mb-3">
-        <Form.Label className="small text-muted">
-          {t('auth.profile.password_new')}
-        </Form.Label>
+      <Form.Group className="mb-3 form-group">
         <Form.Control
           type="password"
           name="password"
@@ -63,10 +57,7 @@ const PasswordForm = ({
         </Form.Control.Feedback>
       </Form.Group>
 
-      <Form.Group className="mb-3">
-        <Form.Label className="small text-muted">
-          {t('auth.profile.password_re')}
-        </Form.Label>
+      <Form.Group className="mb-3 form-group">
         <Form.Control
           type="password"
           name="password_confirmation"
@@ -90,7 +81,7 @@ const PasswordForm = ({
           {t("common.cancel")}
         </Button>
         <Button 
-          variant="primary" 
+          variant="danger" 
           onClick={onSave}
           disabled={loading}
         >
