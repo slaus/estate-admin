@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Menus from "./pages/Menus";
 import Pages from "./pages/Pages";
+import PageForm from "./components/PageForm";
 import Posts from "./pages/Posts";
 import Admins from "./pages/Admins";
 import Users from "./pages/Users";
@@ -42,6 +43,8 @@ function App() {
               >
                 <Route index element={<Dashboard />} />
                 <Route path="menus" element={<Menus />} />
+                <Route path="/pages/new" element={<PageForm />} />
+                <Route path="/pages/edit/:id" element={<PageForm />} />
                 <Route path="pages" element={<Pages />} />
                 <Route path="posts" element={<Posts />} />
                 <Route path="admins" element={<Admins />} />

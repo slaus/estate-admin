@@ -53,6 +53,7 @@ h1 {
   padding   : 0;
   width     : 14rem;
   min-width : 14rem;
+  overflow-x: hidden;
 }
 
 .left-sidebar .logo {
@@ -126,13 +127,53 @@ h1 {
   opacity: 1;
 }
 
+.left-sidebar .nav-link {
+  position     : relative;
+}
+
 .left-sidebar .nav-link.active {
-  color     : #fffd94;
-  background: rgb(177, 0, 0);
+  color        : rgb(177, 0, 0);
+  background   : #fff;
+  border-radius: 15px 0 0 15px;
+  transform    : translateX(6px);
+  padding-left: 10px;
+}
+
+.left-sidebar .nav-link:before, .left-sidebar .nav-link:after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  width: 15px;
+  height: 15px;
+  opacity: 0;
+}
+
+.left-sidebar .nav-link.active:before {
+  right: 6px;
+  top: -15px;
+  background:#fff;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
+  mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
+  transform:rotate(90deg);
+  opacity: 1;
+  transition: opacity .5s ease;
+}
+
+.left-sidebar .nav-link.active:after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  bottom: -15px;
+  background:#fff;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
+  mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
+  transform:rotate(0deg);
+  opacity: 1;
+  transition: opacity .5s ease;
 }
 
 .left-sidebar .nav-link.active i {
-  color  : #fffd94;
+  color  : rgb(177, 0, 0);
   opacity: 1;
 }
 
@@ -150,8 +191,16 @@ h1 {
   height     : 100%;
 }
 
+table .bi-toggle-on {
+  color: rgb(177, 0, 0);
+}
+
+table .bi-toggle-off {
+  color: rgb(108, 117, 125);
+}
+
 table tr.off {
-  opacity: .5;
+  opacity: .65;
 }
 
 form label {
@@ -159,14 +208,14 @@ form label {
 }
 
 .avatar {
-  width: 35px;
-  height: 35px;
-  display: flex;
+  width          : 35px;
+  height         : 35px;
+  display        : flex;
   justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  overflow: hidden;
-  object-fit: contain;
+  align-items    : center;
+  border-radius  : 50%;
+  overflow       : hidden;
+  object-fit     : contain;
 }
 
 .nav-item .menu .user {
@@ -191,4 +240,12 @@ form .invalid-feedback {
   top       : -10px;
   left      : 8px;
   right     : 8px;
+}
+
+body .btn {
+  font-size: 0.85rem;
+}
+
+body .badge {
+  font-weight: 300;
 }

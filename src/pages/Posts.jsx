@@ -117,7 +117,7 @@ const Posts = () => {
             <>
               <Table hover responsive>
                 <thead>
-                  <tr>
+                  <tr className="small">
                     <th>ID</th>
                     <th>{t("common.title")}</th>
                     <th>{t("common.view")}</th>
@@ -134,7 +134,10 @@ const Posts = () => {
                       <td>
                         <strong>{post.title}</strong>
                         {post.excerpt && (
-                          <div className="text-muted small">{post.excerpt}</div>
+                          <div className="text-muted small">
+                            {post.excerpt.slice(0, 35)}
+                            {post.excerpt.length > 35 && '...'}
+                          </div>
                         )}
                       </td>
                       <td><i className={`bi bi-${post?.visibility ? 'toggle-on' : 'toggle-off'}`}></i></td>
@@ -149,7 +152,7 @@ const Posts = () => {
                             </Badge>
                           ))
                         ) : (
-                          <span className="text-muted">{t("common.no_tags")}</span>
+                          <span className="text-muted small">{t("common.no_tags")}</span>
                         )}
                       </td>
                       <td><small>{new Date(post.created_at).toLocaleDateString()}</small></td>

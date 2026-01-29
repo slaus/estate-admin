@@ -192,7 +192,7 @@ const Users = () => {
       <div className="container mt-4">
         <div className="alert alert-danger">{error}</div>
         <Button variant="secondary" onClick={() => navigate("/")}>
-          {t("common.back_to_dashboard")}
+          {t("common.back")}
         </Button>
       </div>
     );

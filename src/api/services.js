@@ -224,6 +224,7 @@ export const menusAPI = {
   update: (id, data) => api.put(`/admin/menus/${id}`, data),
   delete: (id) => api.delete(`/admin/menus/${id}`),
   rebuild: (data) => api.put('/admin/menus/rebuild', data),
+  getPages: () => api.get('/admin/menus/pages'),
 };
 
 export const settingsAPI = {

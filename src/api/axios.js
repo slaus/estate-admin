@@ -8,7 +8,6 @@ const api = axios.create({
   }
 });
 
-// Интерцептор для добавления токена
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('auth_token');
@@ -23,7 +22,6 @@ api.interceptors.request.use(
   }
 );
 
-// Интерцептор для обработки ошибок
 api.interceptors.response.use(
   (response) => {
     return response.data;
@@ -32,21 +30,17 @@ api.interceptors.response.use(
     console.error('Response error:', error);
     
     if (error.response?.status === 401) {
-      // ЕСЛИ ТОКЕН ИСТЕК, ОЧИЩАЕМ ХРАНИЛИЩЕ
       const errorData = error.response?.data;
       
       if (errorData?.expired) {
-        // Сервер явно сказал, что токен истек
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user');
         localStorage.removeItem('token_expires_at');
         
-        // Редирект на логин с причиной
         if (window.location.pathname !== '/login') {
           window.location.href = '/login?reason=expired';
         }
       } else {
-        // Другая 401 ошибка
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user');
         localStorage.removeItem('token_expires_at');

@@ -117,7 +117,7 @@ const Pages = () => {
             <>
               <Table hover responsive>
                 <thead>
-                  <tr>
+                  <tr className="small">
                     <th>ID</th>
                     <th>{t("common.title")}</th>
                     <th>{t("common.view")}</th>
@@ -149,7 +149,7 @@ const Pages = () => {
                             </Badge>
                           ))
                         ) : (
-                          <span className="text-muted">{t("common.no_tags")}</span>
+                          <span className="text-muted small">{t("common.no_tags")}</span>
                         )}
                       </td>
                       <td><small>{new Date(page.created_at).toLocaleDateString()}</small></td>

@@ -28,6 +28,7 @@ const Sidebar = ({ userRole, onItemClick, showSidebar }) => {
                 `d-flex align-items-center mb-2 ${isActive ? "active" : ""}`
               }
               onClick={onItemClick}
+              title={item.label}
             >
               <i className={`bi bi-${item.icon}`}></i>
               <span>{item.label}</span>
