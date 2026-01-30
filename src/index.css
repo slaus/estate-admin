@@ -46,6 +46,16 @@ h1 {
   background: rgb(192, 0, 0);
 }
 
+body .shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05) !important;
+}
+
+body .form-check {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    gap: 10px;
+}
 
 .left-sidebar {
   background: rgb(192, 0, 0);
@@ -133,7 +143,7 @@ h1 {
 
 .left-sidebar .nav-link.active {
   color        : rgb(177, 0, 0);
-  background   : #fff;
+  background   : #ededed;
   border-radius: 15px 0 0 15px;
   transform    : translateX(6px);
   padding-left: 10px;
@@ -148,10 +158,10 @@ h1 {
   opacity: 0;
 }
 
-.left-sidebar .nav-link.active:before {
+.left-sidebar .nav-link.active:not(:first-child):before {
   right: 6px;
   top: -15px;
-  background:#fff;
+  background:#ededed;
   -webkit-mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
   mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
   transform:rotate(90deg);
@@ -164,7 +174,7 @@ h1 {
   position: absolute;
   right: 6px;
   bottom: -15px;
-  background:#fff;
+  background:#ededed;
   -webkit-mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
   mask:url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' xmlns='http://www.w3.org/2000/svg'><defs><mask id='cutout'><rect width='15' height='15' fill='white'/><path d='M0,0 A15,15 0 0,1 15,15 L0,15 L0,0 Z' fill='black'/></mask></defs><rect width='15' height='15' fill='white' mask='url(%23cutout)'/></svg>") no-repeat center;
   transform:rotate(0deg);

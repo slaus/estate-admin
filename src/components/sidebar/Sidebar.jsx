@@ -1,8 +1,8 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { useMenuItems } from "../hooks/useMenuItems";
-import Logo from "../assets/logo-w.svg";
+import { useMenuItems } from "../../hooks/useMenuItems";
+import Logo from "../ui/Logo";
 
 const Sidebar = ({ userRole, onItemClick, showSidebar }) => {
   const role = userRole || "manager";
@@ -11,10 +11,7 @@ const Sidebar = ({ userRole, onItemClick, showSidebar }) => {
   return (
     <div className={`left-sidebar ${showSidebar ? 'mobile' : ''}`}>
       <div className="logo">
-        <img
-          src={Logo}
-          alt="Logo"
-        />
+        <Logo/>
       </div>
       <Nav className="flex-column">
         {menuItems

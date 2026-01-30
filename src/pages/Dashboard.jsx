@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Table from 'react-bootstrap/Table';
-import Loading from '../components/Loading';
+import Loading from '../components/ui/Loading';
 import { useTranslations } from '../hooks/useTranslations';
 
 const Dashboard = () => {

@@ -11,11 +11,11 @@ import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import { useTranslations } from "../hooks/useTranslations";
 import { useSlugGenerator, validateSlug } from "../hooks/useSlugGenerator";
-import Loading from "../components/Loading";
-import LanguageTabs from "../components/LanguageTabs";
-import RichTextEditor from "../components/RichTextEditor";
+import Loading from "../components/ui/Loading";
+import LanguageTabs from "../components/edit/LanguageTabs";
+import RichTextEditor from "../components/edit/RichTextEditor";
 
-const PageForm = () => {
+const PageEdit = () => {
   const { t } = useTranslations();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const PageForm = () => {
   // Используем хук для генерации slug
   const slugGenerator = useSlugGenerator("");
   
-  const [formData, setFormData] = useState({
+  const [editData, setEditData] = useState({
     name: { uk: "", en: "" },
     content: { uk: "", en: "" },
     seo: {
@@ -47,10 +47,10 @@ const PageForm = () => {
 
   useEffect(() => {
     // Автоматически обновляем slug при изменении украинского названия
-    if (formData.name.uk) {
-      slugGenerator.updateText(formData.name.uk);
+    if (editData.name.uk) {
+      slugGenerator.updateText(editData.name.uk);
     }
-  }, [formData.name.uk]);
+  }, [editData.name.uk]);
 
   const fetchPage = async () => {
     setLoading(true);
@@ -58,7 +58,7 @@ const PageForm = () => {
       const response = await pagesAPI.getOne(id);
       const page = response.data;
       
-      setFormData({
+      setEditData({
         name: page.name || { uk: "", en: "" },
         content: page.content || { uk: "", en: "" },
         seo: page.seo || {
@@ -100,10 +100,10 @@ const PageForm = () => {
 
     // Валидация обязательных полей
     const validationErrors = {};
-    if (!formData.name.uk.trim()) {
+    if (!editData.name.uk.trim()) {
       validationErrors['name.uk'] = ['Назва українською обов\'язкова'];
     }
-    if (!formData.content.uk?.trim()) {
+    if (!editData.content.uk?.trim()) {
       validationErrors['content.uk'] = ['Контент українською обов\'язковий'];
     }
 
@@ -117,15 +117,15 @@ const PageForm = () => {
       const dataToSend = {
         slug: slugGenerator.slug,
         name: {
-          uk: formData.name.uk.trim(),
-          en: formData.name.en?.trim() || ""
+          uk: editData.name.uk.trim(),
+          en: editData.name.en?.trim() || ""
         },
         content: {
-          uk: formData.content.uk?.trim() || "",
-          en: formData.content.en?.trim() || ""
+          uk: editData.content.uk?.trim() || "",
+          en: editData.content.en?.trim() || ""
         },
-        seo: formData.seo,
-        visibility: formData.visibility
+        seo: editData.seo,
+        visibility: editData.visibility
       };
 
       if (id) {
@@ -161,24 +161,24 @@ const PageForm = () => {
   };
 
   const generateSeo = () => {
-    const newSeo = { ...formData.seo };
+    const newSeo = { ...editData.seo };
     
-    Object.keys(formData.name).forEach(lang => {
-      if (formData.name[lang]) {
+    Object.keys(editData.name).forEach(lang => {
+      if (editData.name[lang]) {
         // Генерация meta title из названия
-        if (!newSeo.meta_title[lang] && formData.name[lang]) {
-          newSeo.meta_title[lang] = formData.name[lang];
+        if (!newSeo.meta_title[lang] && editData.name[lang]) {
+          newSeo.meta_title[lang] = editData.name[lang];
         }
         
         // Генерация meta description из контента
-        if (!newSeo.meta_description[lang] && formData.content[lang]) {
-          const content = formData.content[lang].replace(/<[^>]*>/g, '');
+        if (!newSeo.meta_description[lang] && editData.content[lang]) {
+          const content = editData.content[lang].replace(/<[^>]*>/g, '');
           newSeo.meta_description[lang] = content.substring(0, 160) + (content.length > 160 ? '...' : '');
         }
         
         // Генерация meta keywords из названия
-        if (!newSeo.meta_keywords[lang] && formData.name[lang]) {
-          const words = formData.name[lang]
+        if (!newSeo.meta_keywords[lang] && editData.name[lang]) {
+          const words = editData.name[lang]
             .split(' ')
             .filter(word => word.length > 2)
             .slice(0, 5);
@@ -187,7 +187,7 @@ const PageForm = () => {
       }
     });
     
-    setFormData(prev => ({ ...prev, seo: newSeo }));
+    setEditData(prev => ({ ...prev, seo: newSeo }));
   };
 
   const handleSlugRegenerate = () => {
@@ -247,7 +247,7 @@ const PageForm = () => {
                       variant="outline-secondary" 
                       className="ms-2"
                       onClick={handleSlugRegenerate}
-                      disabled={saving || !formData.name.uk}
+                      disabled={saving || !editData.name.uk}
                       title="Згенерувати slug з української назви"
                     >
                       <i className="bi bi-arrow-clockwise"></i>
@@ -274,9 +274,9 @@ const PageForm = () => {
                     <Form.Check
                       type="switch"
                       id="visibility-switch"
-                      label={formData.visibility ? t("common.visible") : t("common.hidden")}
-                      checked={formData.visibility}
-                      onChange={(e) => setFormData(prev => ({ ...prev, visibility: e.target.checked }))}
+                      label={editData.visibility ? t("common.visible") : t("common.hidden")}
+                      checked={editData.visibility}
+                      onChange={(e) => setEditData(prev => ({ ...prev, visibility: e.target.checked }))}
                       disabled={saving}
                     />
                   </div>
@@ -298,8 +298,8 @@ const PageForm = () => {
                         </Form.Label>
                         <Form.Control
                           type="text"
-                          value={formData.name[lang] || ""}
-                          onChange={(e) => setFormData(prev => ({
+                          value={editData.name[lang] || ""}
+                          onChange={(e) => setEditData(prev => ({
                             ...prev,
                             name: { ...prev.name, [lang]: e.target.value }
                           }))}
@@ -317,8 +317,8 @@ const PageForm = () => {
                           {t("dashboard.panel.pages.content_label")} {lang.toUpperCase()} {lang === 'uk' && '*'}
                         </Form.Label>
                         <RichTextEditor
-                          value={formData.content[lang] || ""}
-                          onChange={(value) => setFormData(prev => ({
+                          value={editData.content[lang] || ""}
+                          onChange={(value) => setEditData(prev => ({
                             ...prev,
                             content: { ...prev.content, [lang]: value }
                           }))}
@@ -358,8 +358,8 @@ const PageForm = () => {
                         <Form.Label>Meta Title {lang.toUpperCase()}</Form.Label>
                         <Form.Control
                           type="text"
-                          value={formData.seo.meta_title?.[lang] || ""}
-                          onChange={(e) => setFormData(prev => ({
+                          value={editData.seo.meta_title?.[lang] || ""}
+                          onChange={(e) => setEditData(prev => ({
                             ...prev,
                             seo: {
                               ...prev.seo,
@@ -378,8 +378,8 @@ const PageForm = () => {
                         <Form.Control
                           as="textarea"
                           rows={3}
-                          value={formData.seo.meta_description?.[lang] || ""}
-                          onChange={(e) => setFormData(prev => ({
+                          value={editData.seo.meta_description?.[lang] || ""}
+                          onChange={(e) => setEditData(prev => ({
                             ...prev,
                             seo: {
                               ...prev.seo,
@@ -397,8 +397,8 @@ const PageForm = () => {
                         <Form.Label>Meta Keywords {lang.toUpperCase()}</Form.Label>
                         <Form.Control
                           type="text"
-                          value={formData.seo.meta_keywords?.[lang] || ""}
-                          onChange={(e) => setFormData(prev => ({
+                          value={editData.seo.meta_keywords?.[lang] || ""}
+                          onChange={(e) => setEditData(prev => ({
                             ...prev,
                             seo: {
                               ...prev.seo,
@@ -441,4 +441,4 @@ const PageForm = () => {
   );
 };
 
-export default PageForm;
+export default PageEdit;

@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import { useAuth } from "../contexts/AuthContext";
-import useStore from "../store/useStore";
-import { useTranslations } from "../hooks/useTranslations";
-import ProfileForm from "./profile/ProfileForm";
-import AvatarForm from "./profile/AvatarForm";
-import PasswordForm from "./profile/PasswordForm";
-import Logo from '../assets/no-avatar.svg';
+import { useAuth } from "../../contexts/AuthContext";
+import useStore from "../../store/useStore";
+import { useTranslations } from "../../hooks/useTranslations";
+import ProfileForm from "./ProfileForm";
+import AvatarForm from "./AvatarForm";
+import PasswordForm from "./PasswordForm";
+import Logo from '../../assets/no-avatar.svg';
 
 const ProfileModal = ({ show, onHide }) => {
   const { user, updateProfile, removeAvatar } = useAuth();

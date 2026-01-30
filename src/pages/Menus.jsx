@@ -13,8 +13,8 @@ import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import { useTranslations } from "../hooks/useTranslations";
-import Loading from "../components/Loading";
-import Search from "../components/Search";
+import Loading from "../components/ui/Loading";
+import Search from "../components/search/Search";
 
 const Menus = () => {
   const { t } = useTranslations();

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { pagesAPI } from "../api/services";
 import useStore from "../store/useStore";
 import Button from "react-bootstrap/Button";
@@ -8,11 +9,12 @@ import Pagination from "react-bootstrap/Pagination";
 import Modal from "react-bootstrap/Modal";
 import Badge from "react-bootstrap/Badge";
 import { useTranslations } from "../hooks/useTranslations";
-import Loading from "../components/Loading";
-import Search from "../components/Search";
+import Loading from "../components/ui/Loading";
+import Search from "../components/search/Search";
 
 const Pages = () => {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
+  const navigate = useNavigate();
   const { addNotification } = useStore();
   const [pages, setPages] = useState([]);
   const [filteredPages, setFilteredPages] = useState([]);
@@ -97,13 +99,15 @@ const Pages = () => {
     return <Loading />;
   }
 
+  console.log(currentPages);
+
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="h4 mb-4 text-gray-800">
           {t("dashboard.panel.pages.title")}
         </h1>
-        <Button variant="secondary" href="/pages/new">
+        <Button variant="secondary" onClick={() => navigate("/pages/new")}>
           <i className="bi bi-plus-circle me-2"></i>
           {t("dashboard.panel.pages.new")}
         </Button>
@@ -132,9 +136,12 @@ const Pages = () => {
                     <tr key={page.id} className={page?.visibility ? '' : 'off'}>
                       <td>{page.id}</td>
                       <td>
-                        <strong>{page.title}</strong>
-                        {page.excerpt && (
-                          <div className="text-muted small">{page.excerpt}</div>
+                        <strong>{page.name[locale]}</strong>
+                        {page.content[locale] && (
+                          <div className="text-muted small">
+                            {page.content[locale].slice(0, 35)}
+                            {page.content[locale].length > 35 && '...'}
+                          </div>
                         )}
                       </td>
                       <td><i className={`bi bi-${page?.visibility ? 'toggle-on' : 'toggle-off'}`}></i></td>
@@ -227,7 +234,6 @@ const Pages = () => {
         </Card.Body>
       </Card>
 
-      {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>

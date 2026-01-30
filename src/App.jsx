@@ -8,15 +8,15 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { LoadingProvider } from "./contexts/LoadingContext";
-import PrivateRoute from "./components/PrivateRoute";
-import Layout from "./components/Layout";
+import PrivateRoute from "./components/route/PrivateRoute";
+import Layout from "./components/layout/Layout";
 import { LocaleProvider } from "./contexts/LocaleContext";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Menus from "./pages/Menus";
 import Pages from "./pages/Pages";
-import PageForm from "./components/PageForm";
+import PageEdit from "./pages/PageEdit";
 import Posts from "./pages/Posts";
 import Admins from "./pages/Admins";
 import Users from "./pages/Users";
@@ -43,8 +43,8 @@ function App() {
               >
                 <Route index element={<Dashboard />} />
                 <Route path="menus" element={<Menus />} />
-                <Route path="/pages/new" element={<PageForm />} />
-                <Route path="/pages/edit/:id" element={<PageForm />} />
+                <Route path="/pages/new" element={<PageEdit />} />
+                <Route path="/pages/edit/:id" element={<PageEdit />} />
                 <Route path="pages" element={<Pages />} />
                 <Route path="posts" element={<Posts />} />
                 <Route path="admins" element={<Admins />} />

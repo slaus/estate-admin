@@ -8,8 +8,8 @@ import Pagination from "react-bootstrap/Pagination";
 import Modal from "react-bootstrap/Modal";
 import Badge from "react-bootstrap/Badge";
 import { useTranslations } from "../hooks/useTranslations";
-import Loading from "../components/Loading";
-import Search from "../components/Search";
+import Loading from "../components/ui/Loading";
+import Search from "../components/search/Search";
 
 const Posts = () => {
   const { t } = useTranslations();

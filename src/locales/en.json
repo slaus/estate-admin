@@ -1,47 +1,102 @@
 {
   "common": {
     "app_name": "Estate Admin",
+    "name": "Name",
+    "email": "E-mail",
+    "role": "Role",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "inactive",
     "loading": "Loading...",
     "save": "Save",
     "cancel": "Cancel",
+    "create": "Create",
     "delete": "Delete",
+    "confirm_delete": "Confirm delete",
+    "action_cannot_be_undone": "This action cannot be undone!",
     "edit": "Edit",
+    "update": "Update",
     "add": "Add",
-    "search": "Search",
+    "search": "Search...",
     "confirm": "Confirm",
     "success": "Success",
     "error": "Error",
     "warning": "Warning",
-    "info": "Info"
+    "info": "Information",
+    "title": "Title",
+    "view": "Visibility",
+    "slug": "CNC",
+    "tags": "Tags",
+    "no_tags": "No tags",
+    "date": "Date",
+    "actions": "Actions",
+    "blacklist": "Blacklist",
+    "back": "Back to main page",
+    "layout": "Layout",
+    "target": "Target",
+    "target_type": "Target type",
+    "target_page": "Page",
+    "target_link": "External link",
+    "select_page": "Select page",
+    "page_placeholder": "Select page...",
+    "visible": "Show",
+    "hidden": "Hide"
   },
-  
+
+  "roles": {
+    "superadmin": "Superadmin",
+    "admin": "Admin",
+    "manager": "Manager"
+  },
+
   "auth": {
     "login": {
-      "title": "Sign in",
+      "title": "Login",
       "email": "Enter email",
       "password": "Enter password",
-      "submit": "Login",
-      "enter": "Signing in...",
-      "forgot_password": "Forgot password?",
+      "submit": "Authorization",
+      "enter": "Login...",
+      "forgot_password": "Forgot your password?",
       "errors": {
         "required": "This field is required",
-        "required_email": "Email is required",
-        "required_password": "Password is required",
+        "required_email": "Email required",
+        "required_password": "Password required",
         "invalid_email": "Invalid email address",
         "invalid_credentials": "Invalid email or password",
-        "no_entry": "Failed to login",
-        "invalid_login": "An error occurred during login"
+        "no_entry": "Unable to log in",
+        "invalid_login": "There was an error logging in"
       }
     },
     "profile": {
       "menu": "Profile",
-      "title": "Edit Profile"
+      "edit": "Edit",
+      "name_new": "Your new name",
+      "password": "Your current password",
+      "password_new": "Your new password",
+      "password_re": "Repeat new password",
+      "avatar_new": "New avatar",
+      "avatar_delete": "Delete avatar",
+      "change_avatar": "Change avatar",
+      "change_password": "Change password",
+      "avatar_hint": "Click the camera to upload a new avatar",
+      "avatar_updated": "Avatar successfully updated",
+      "avatar_updateError": "Failed to update avatar",
+      "avatar_removed": "Avatar removed",
+      "avatar_removeError": "Failed to remove avatar",
+      "password_updated": "Password successfully changed",
+      "password_updateError": "Failed to change password",
+      "updated": "Profile successfully updated",
+      "updateError": "Failed to update profile",
+      "errors": {
+        "current_err": "You must enter your current password",
+        "passwords": "Passwords must match"
+      }
     },
     "logout": {
       "menu": "Logout"
     }
   },
-  
+
   "menu": {
     "dashboard": "Dashboard",
     "posts": "Posts",
@@ -50,11 +105,12 @@
     "employees": "Employees",
     "testimonials": "Testimonials",
     "partners": "Partners",
-    "menus": "Menus",
+    "menus": "Menu",
     "settings": "Settings",
-    "users": "Users"
+    "users": "Users",
+    "admins": "Administrators"
   },
-  
+
   "dashboard": {
     "panel": {
       "dashboard": {
@@ -62,13 +118,82 @@
         "recent_posts": "Recent Posts"
       },
       "menus": {
-        "title": "Menus"
+        "title": "Menu",
+        "new": "New Menu Item",
+        "create": "Create Menu",
+        "edit": "Edit Menu",
+        "name_uk": "Name (Ukrainian)",
+        "name_en": "Name (English)",
+        "not_found": "Menu Not Found",
+        "try_found": "Try Another Search Term",
+        "no_menu": "Start by Creating the First Menu Item",
+        "try_new": "Create New Menu Item",
+        "page": "Page",
+        "link": "Link",
+        "parent": "Source",
+        "no_parent": "Root",
+        "no_target": "Target Not Set",
+        "unknown_target": "Unknown Target",
+        "no_menus": "Menu Not Found",
+        "no_results": "The menu you requested was not found",
+        "link_url": "Link URL",
+        "empty_list": "The menu has not been created yet",
+        "confirm_delete": "Confirm deletion",
+        "confirm_delete_message": "Are you sure you want to delete the menu",
+        "this_action_cannot_be_undone": "This action cannot be undone!",
+        "layouts": {
+          "main": "Main menu",
+          "footer": "Footer menu",
+          "unknown": "Unknown"
+        },
+        "errors": {
+          "load_failed": "Failed to load menu"
+        },
+        "delete": {
+          "success": "Menu deleted successfully",
+          "error": "Failed to delete menu"
+        }
       },
       "posts": {
-        "title": "Posts"
+        "title": "Posts",
+        "new": "New post",
+        "not_found": "No posts found",
+        "try_found": "Try another search term term",
+        "no_post": "Start by creating your first post",
+        "try_new": "Create a new post"
       },
       "pages": {
-        "title": "Pages"
+        "title": "Pages",
+        "name": "Page name",
+        "new": "New page",
+        "not_found": "Page not found",
+        "try_found": "Try another search term",
+        "no_page": "Start by creating your first page",
+        "try_new": "Create a new page",
+        "create_title": "Create a page",
+        "edit_title": "Edit page",
+        "slug": "Slug",
+        "generate_slug": "Generate",
+        "slug_help": "URL-friendly page identifier",
+        "content": "Content",
+        "content_label": "Content",
+        "seo_settings": "SEO Settings",
+        "generate_seo": "Generate SEO",
+        "meta_title_help": "Page title for search engines (50-60 characters)",
+        "meta_description_help": "Page description for search results (150-160 characters)",
+        "meta_keywords_help": "Keywords separated by commas",
+        "errors": {
+          "load_failed": "Page failed to load"
+        },
+        "create": {
+          "success": "Page created successfully"
+        },
+        "update": {
+          "success": "Page updated successfully"
+        },
+        "save": {
+          "error": "Page could not be saved"
+        }
       },
       "tags": {
         "title": "Tags"
@@ -82,8 +207,23 @@
       "partners": {
         "title": "Partners"
       },
+      "admins": {
+        "title": "Administrators",
+        "new": "New Admin",
+        "not_found": "No Admins Found",
+        "try_found": "Try a different search term",
+        "no_admin": "Start by creating your first admin",
+        "try_new": "Create a new admin",
+        "delete_confirm": "Are you sure you want to delete an admin"
+      },
       "users": {
-        "title": "Users"
+        "title": "Users",
+        "new": "New User",
+        "not_found": "No users found",
+        "try_found": "Try a different search term",
+        "no_user": "Start by creating your first user",
+        "try_new": "Create a new user",
+        "delete_confirm": "Are you sure you want to delete a user"
       },
       "settings": {
         "title": "Settings"

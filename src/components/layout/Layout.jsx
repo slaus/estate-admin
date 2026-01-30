@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
-import { useTranslations } from "../hooks/useTranslations";
-import ProfileModal from "../components/ProfileModal";
+import { useTranslations } from "../../hooks/useTranslations";
+import ProfileModal from "../profile/ProfileModal";
 
-import Avatar from "../assets/no-avatar.svg";
-import Sidebar from "./Sidebar";
-import Loading from "./Loading";
+import Avatar from "../../assets/no-avatar.svg";
+import Sidebar from "../sidebar/Sidebar";
+import Loading from "../ui/Loading";
 
 const Layout = () => {
   const { user, logout } = useAuth();
