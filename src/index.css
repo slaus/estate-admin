@@ -205,6 +205,32 @@ table .bi-toggle-on {
   color: rgb(177, 0, 0);
 }
 
+.form-switch .form-check-input:checked {
+    background-color: rgb(177, 0, 0);
+    border-color: rgb(177, 0, 0);
+}
+
+.form-switch .form-check-input:focus {
+    border-color: rgb(177, 0, 0);
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgb(253 13 13 / 25%);
+}
+
+.card .nav-link {
+  color: rgb(177, 0, 0);
+}
+
+.card .nav-tabs .nav-item.show .nav-link, .card .nav-tabs .nav-link.active {
+    color: #fff;
+    background-color: rgb(177, 0, 0);
+    border-color: rgb(177, 0, 0);
+}
+
+.card .form-check-input:checked {
+    background-color: rgb(177, 0, 0);
+    border-color: rgb(177, 0, 0);
+}
+
 table .bi-toggle-off {
   color: rgb(108, 117, 125);
 }

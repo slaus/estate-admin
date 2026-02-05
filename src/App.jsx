@@ -15,6 +15,7 @@ import { LocaleProvider } from "./contexts/LocaleContext";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Menus from "./pages/Menus";
+import MenuEdit from "./pages/MenuEdit";
 import Pages from "./pages/Pages";
 import PageEdit from "./pages/PageEdit";
 import Posts from "./pages/Posts";
@@ -42,6 +43,8 @@ function App() {
                 }
               >
                 <Route index element={<Dashboard />} />
+                <Route path="menus/new" element={<MenuEdit />} />
+                <Route path="menus/edit/:id" element={<MenuEdit />} />
                 <Route path="menus" element={<Menus />} />
                 <Route path="/pages/new" element={<PageEdit />} />
                 <Route path="/pages/edit/:id" element={<PageEdit />} />

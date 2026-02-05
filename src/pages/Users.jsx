@@ -417,17 +417,12 @@ const Users = () => {
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            {t("common.confirm_delete")}
-          </Modal.Title>
+          <Modal.Title className="text-danger">{t("common.confirm_delete")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {t("dashboard.panel.users.delete_confirm")}
-          <strong>{selectedUser?.name || selectedUser?.email}</strong>?
-          <br />
-          <div>
-            <strong>{t("common.action_cannot_be_undone")}</strong>
-          </div>
+          {t("common.action_before_user")}
+          <strong>{selectedUser?.name || selectedUser?.email}</strong>
+          {t("common.action_after")}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>

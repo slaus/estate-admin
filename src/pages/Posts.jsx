@@ -233,18 +233,19 @@ const Posts = () => {
       {/* Delete Confirmation Modal */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
+          <Modal.Title className="text-danger">{t("common.confirm_delete")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete post "
-          <strong>{selectedPost?.title}</strong>"? This action cannot be undone.
+          {t("common.action_before_post")}
+          <strong>{selectedPost?.title}</strong>
+          {t("common.action_after")}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button variant="danger" onClick={handleDeleteConfirm}>
-            Delete
+            {t("common.delete")}
           </Button>
         </Modal.Footer>
       </Modal>

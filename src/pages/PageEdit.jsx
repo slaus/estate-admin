@@ -9,6 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
+import { Tabs, Tab } from "react-bootstrap";
 import { useTranslations } from "../hooks/useTranslations";
 import { useSlugGenerator, validateSlug } from "../hooks/useSlugGenerator";
 import Loading from "../components/ui/Loading";
@@ -20,23 +21,23 @@ const PageEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addNotification } = useStore();
-  
+
   const [loading, setLoading] = useState(!!id);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
-  
-  // Используем хук для генерации slug
+  const [activeKey, setActiveKey] = useState("content");
+
   const slugGenerator = useSlugGenerator("");
-  
+
   const [editData, setEditData] = useState({
     name: { uk: "", en: "" },
     content: { uk: "", en: "" },
     seo: {
       meta_title: { uk: "", en: "" },
       meta_description: { uk: "", en: "" },
-      meta_keywords: { uk: "", en: "" }
+      meta_keywords: { uk: "", en: "" },
     },
-    visibility: true
+    visibility: true,
   });
 
   useEffect(() => {
@@ -46,7 +47,6 @@ const PageEdit = () => {
   }, [id]);
 
   useEffect(() => {
-    // Автоматически обновляем slug при изменении украинского названия
     if (editData.name.uk) {
       slugGenerator.updateText(editData.name.uk);
     }
@@ -57,19 +57,18 @@ const PageEdit = () => {
     try {
       const response = await pagesAPI.getOne(id);
       const page = response.data;
-      
+
       setEditData({
         name: page.name || { uk: "", en: "" },
         content: page.content || { uk: "", en: "" },
         seo: page.seo || {
           meta_title: { uk: "", en: "" },
           meta_description: { uk: "", en: "" },
-          meta_keywords: { uk: "", en: "" }
+          meta_keywords: { uk: "", en: "" },
         },
-        visibility: page.visibility !== false
+        visibility: page.visibility !== false,
       });
-      
-      // Устанавливаем slug из существующей страницы
+
       if (page.slug) {
         slugGenerator.updateSlug(page.slug);
       }
@@ -90,7 +89,6 @@ const PageEdit = () => {
     setSaving(true);
     setErrors({});
 
-    // Валидация slug
     const slugValidation = validateSlug(slugGenerator.slug);
     if (!slugValidation.valid) {
       setErrors({ slug: [slugValidation.message] });
@@ -98,13 +96,12 @@ const PageEdit = () => {
       return;
     }
 
-    // Валидация обязательных полей
     const validationErrors = {};
     if (!editData.name.uk.trim()) {
-      validationErrors['name.uk'] = ['Назва українською обов\'язкова'];
+      validationErrors["name.uk"] = ["Назва українською обов'язкова"];
     }
     if (!editData.content.uk?.trim()) {
-      validationErrors['content.uk'] = ['Контент українською обов\'язковий'];
+      validationErrors["content.uk"] = ["Контент українською обов'язковий"];
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -118,14 +115,14 @@ const PageEdit = () => {
         slug: slugGenerator.slug,
         name: {
           uk: editData.name.uk.trim(),
-          en: editData.name.en?.trim() || ""
+          en: editData.name.en?.trim() || "",
         },
         content: {
           uk: editData.content.uk?.trim() || "",
-          en: editData.content.en?.trim() || ""
+          en: editData.content.en?.trim() || "",
         },
         seo: editData.seo,
-        visibility: editData.visibility
+        visibility: editData.visibility,
       };
 
       if (id) {
@@ -141,18 +138,20 @@ const PageEdit = () => {
           message: t("dashboard.panel.pages.create.success"),
         });
       }
-      
+
       navigate("/pages");
-      
     } catch (error) {
       console.error("Error saving page:", error);
-      
+
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
       } else {
         addNotification({
           type: "error",
-          message: error.response?.data?.message || error.message || t("dashboard.panel.pages.save.error"),
+          message:
+            error.response?.data?.message ||
+            error.message ||
+            t("dashboard.panel.pages.save.error"),
         });
       }
     } finally {
@@ -162,32 +161,30 @@ const PageEdit = () => {
 
   const generateSeo = () => {
     const newSeo = { ...editData.seo };
-    
-    Object.keys(editData.name).forEach(lang => {
+
+    Object.keys(editData.name).forEach((lang) => {
       if (editData.name[lang]) {
-        // Генерация meta title из названия
         if (!newSeo.meta_title[lang] && editData.name[lang]) {
           newSeo.meta_title[lang] = editData.name[lang];
         }
-        
-        // Генерация meta description из контента
+
         if (!newSeo.meta_description[lang] && editData.content[lang]) {
-          const content = editData.content[lang].replace(/<[^>]*>/g, '');
-          newSeo.meta_description[lang] = content.substring(0, 160) + (content.length > 160 ? '...' : '');
+          const content = editData.content[lang].replace(/<[^>]*>/g, "");
+          newSeo.meta_description[lang] =
+            content.substring(0, 160) + (content.length > 160 ? "..." : "");
         }
-        
-        // Генерация meta keywords из названия
+
         if (!newSeo.meta_keywords[lang] && editData.name[lang]) {
           const words = editData.name[lang]
-            .split(' ')
-            .filter(word => word.length > 2)
+            .split(" ")
+            .filter((word) => word.length > 2)
             .slice(0, 5);
-          newSeo.meta_keywords[lang] = words.join(', ');
+          newSeo.meta_keywords[lang] = words.join(", ");
         }
       }
     });
-    
-    setEditData(prev => ({ ...prev, seo: newSeo }));
+
+    setEditData((prev) => ({ ...prev, seo: newSeo }));
   };
 
   const handleSlugRegenerate = () => {
@@ -206,7 +203,9 @@ const PageEdit = () => {
     <>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="h4 mb-4 text-gray-800">
-          {id ? t("dashboard.panel.pages.edit_title") : t("dashboard.panel.pages.create_title")}
+          {id
+            ? t("dashboard.panel.pages.edit_title")
+            : t("dashboard.panel.pages.create_title")}
         </h1>
         <Button variant="secondary" onClick={() => navigate("/pages")}>
           <i className="bi bi-arrow-left me-2"></i>
@@ -214,15 +213,18 @@ const PageEdit = () => {
         </Button>
       </div>
 
-      <Card>
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
+        <Card className="mb-3">
+          <Card.Body>
             {Object.keys(errors).length > 0 && (
               <Alert variant="danger" className="mb-4">
                 <ul className="mb-0">
                   {Object.entries(errors).map(([field, fieldErrors]) => (
                     <li key={field}>
-                      <strong>{field}:</strong> {Array.isArray(fieldErrors) ? fieldErrors.join(', ') : fieldErrors}
+                      <strong>{field}:</strong>{" "}
+                      {Array.isArray(fieldErrors)
+                        ? fieldErrors.join(", ")
+                        : fieldErrors}
                     </li>
                   ))}
                 </ul>
@@ -243,8 +245,8 @@ const PageEdit = () => {
                       isInvalid={!!errors.slug}
                       placeholder="my-page-slug"
                     />
-                    <Button 
-                      variant="outline-secondary" 
+                    <Button
+                      variant="outline-secondary"
                       className="ms-2"
                       onClick={handleSlugRegenerate}
                       disabled={saving || !editData.name.uk}
@@ -269,174 +271,238 @@ const PageEdit = () => {
               </Col>
               <Col md={4}>
                 <Form.Group className="mb-3">
-                  <Form.Label>{t("common.visible")}</Form.Label>
+                  <Form.Label>{t("common.settings")}</Form.Label>
                   <div>
                     <Form.Check
                       type="switch"
                       id="visibility-switch"
-                      label={editData.visibility ? t("common.visible") : t("common.hidden")}
+                      label={
+                        editData.visibility
+                          ? t("common.visible")
+                          : t("common.hidden")
+                      }
                       checked={editData.visibility}
-                      onChange={(e) => setEditData(prev => ({ ...prev, visibility: e.target.checked }))}
+                      onChange={(e) =>
+                        setEditData((prev) => ({
+                          ...prev,
+                          visibility: e.target.checked,
+                        }))
+                      }
                       disabled={saving}
                     />
                   </div>
                 </Form.Group>
               </Col>
             </Row>
+          </Card.Body>
+        </Card>
 
-            <Card className="mb-4">
-              <Card.Header className="bg-light">
-                <h5 className="mb-0">{t("dashboard.panel.pages.content")}</h5>
-              </Card.Header>
-              <Card.Body>
-                <LanguageTabs>
-                  {(lang) => (
-                    <>
-                      <Form.Group className="mb-3">
-                        <Form.Label>
-                          {t("dashboard.panel.pages.title")} {lang.toUpperCase()} {lang === 'uk' && '*'}
-                        </Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={editData.name[lang] || ""}
-                          onChange={(e) => setEditData(prev => ({
-                            ...prev,
-                            name: { ...prev.name, [lang]: e.target.value }
-                          }))}
-                          required={lang === 'uk'}
-                          disabled={saving}
-                          isInvalid={!!errors[`name.${lang}`]}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors[`name.${lang}`]}
-                        </Form.Control.Feedback>
-                      </Form.Group>
+        <Card>
+          <Card.Body>
+            <Tabs
+              activeKey={activeKey}
+              onSelect={(e) => setActiveKey(e)}
+              className="mb-3"
+            >
+              <Tab
+                eventKey="content"
+                title={t("dashboard.panel.pages.content")}
+              >
+                <Card className="mb-4">
+                  <Card.Header className="bg-light">
+                    <h5 className="mb-0">
+                      {t("dashboard.panel.pages.content")}
+                    </h5>
+                  </Card.Header>
+                  <Card.Body>
+                    <LanguageTabs>
+                      {(lang) => (
+                        <>
+                          <Form.Group className="mb-3">
+                            <Form.Label>
+                              {t("dashboard.panel.pages.title")}{" "}
+                              {lang.toUpperCase()} {lang === "uk" && "*"}
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={editData.name[lang] || ""}
+                              onChange={(e) =>
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  name: {
+                                    ...prev.name,
+                                    [lang]: e.target.value,
+                                  },
+                                }))
+                              }
+                              required={lang === "uk"}
+                              disabled={saving}
+                              isInvalid={!!errors[`name.${lang}`]}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {errors[`name.${lang}`]}
+                            </Form.Control.Feedback>
+                          </Form.Group>
 
-                      <Form.Group className="mb-3">
-                        <Form.Label>
-                          {t("dashboard.panel.pages.content_label")} {lang.toUpperCase()} {lang === 'uk' && '*'}
-                        </Form.Label>
-                        <RichTextEditor
-                          value={editData.content[lang] || ""}
-                          onChange={(value) => setEditData(prev => ({
-                            ...prev,
-                            content: { ...prev.content, [lang]: value }
-                          }))}
-                          disabled={saving}
-                          uploadEndpoint="/api/upload"
-                        />
-                        {errors[`content.${lang}`] && (
-                          <Form.Control.Feedback type="invalid" style={{ display: 'block' }}>
-                            {errors[`content.${lang}`]}
-                          </Form.Control.Feedback>
-                        )}
-                      </Form.Group>
-                    </>
-                  )}
-                </LanguageTabs>
-              </Card.Body>
-            </Card>
+                          <Form.Group>
+                            <Form.Label>
+                              {t("dashboard.panel.pages.content_label")}{" "}
+                              {lang.toUpperCase()} {lang === "uk" && "*"}
+                            </Form.Label>
+                            <RichTextEditor
+                              value={editData.content[lang] || ""}
+                              onChange={(value) =>
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  content: { ...prev.content, [lang]: value },
+                                }))
+                              }
+                              disabled={saving}
+                              uploadEndpoint="/api/upload"
+                            />
+                            {errors[`content.${lang}`] && (
+                              <Form.Control.Feedback
+                                type="invalid"
+                                style={{ display: "block" }}
+                              >
+                                {errors[`content.${lang}`]}
+                              </Form.Control.Feedback>
+                            )}
+                          </Form.Group>
+                        </>
+                      )}
+                    </LanguageTabs>
+                  </Card.Body>
+                </Card>
+              </Tab>
 
-            <Card className="mb-4">
-              <Card.Header className="bg-light d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">{t("dashboard.panel.pages.seo_settings")}</h5>
-                <Button 
-                  variant="outline-primary" 
-                  size="sm"
-                  onClick={generateSeo}
-                  disabled={saving}
-                >
-                  <i className="bi bi-magic me-1"></i>
-                  {t("dashboard.panel.pages.generate_seo")}
-                </Button>
-              </Card.Header>
-              <Card.Body>
-                <LanguageTabs>
-                  {(lang) => (
-                    <>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Meta Title {lang.toUpperCase()}</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={editData.seo.meta_title?.[lang] || ""}
-                          onChange={(e) => setEditData(prev => ({
-                            ...prev,
-                            seo: {
-                              ...prev.seo,
-                              meta_title: { ...prev.seo.meta_title, [lang]: e.target.value }
-                            }
-                          }))}
-                          disabled={saving}
-                        />
-                        <Form.Text className="text-muted">
-                          {t("dashboard.panel.pages.meta_title_help")}
-                        </Form.Text>
-                      </Form.Group>
+              <Tab
+                eventKey="seo"
+                title={t("dashboard.panel.pages.seo_settings")}
+              >
+                <Card className="mb-4">
+                  <Card.Header className="bg-light d-flex justify-content-between align-items-center">
+                    <h5 className="mb-0">
+                      {t("dashboard.panel.pages.seo_settings")}
+                    </h5>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={generateSeo}
+                      disabled={saving}
+                    >
+                      <i className="bi bi-magic me-1"></i>
+                      {t("dashboard.panel.pages.generate_seo")}
+                    </Button>
+                  </Card.Header>
+                  <Card.Body>
+                    <LanguageTabs>
+                      {(lang) => (
+                        <>
+                          <Form.Group className="mb-3">
+                            <Form.Label>
+                              Meta Title {lang.toUpperCase()}
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={editData.seo.meta_title?.[lang] || ""}
+                              onChange={(e) =>
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  seo: {
+                                    ...prev.seo,
+                                    meta_title: {
+                                      ...prev.seo.meta_title,
+                                      [lang]: e.target.value,
+                                    },
+                                  },
+                                }))
+                              }
+                              disabled={saving}
+                            />
+                            <Form.Text className="text-muted">
+                              {t("dashboard.panel.pages.meta_title_help")}
+                            </Form.Text>
+                          </Form.Group>
 
-                      <Form.Group className="mb-3">
-                        <Form.Label>Meta Description {lang.toUpperCase()}</Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          rows={3}
-                          value={editData.seo.meta_description?.[lang] || ""}
-                          onChange={(e) => setEditData(prev => ({
-                            ...prev,
-                            seo: {
-                              ...prev.seo,
-                              meta_description: { ...prev.seo.meta_description, [lang]: e.target.value }
-                            }
-                          }))}
-                          disabled={saving}
-                        />
-                        <Form.Text className="text-muted">
-                          {t("dashboard.panel.pages.meta_description_help")}
-                        </Form.Text>
-                      </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>
+                              Meta Description {lang.toUpperCase()}
+                            </Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              rows={3}
+                              value={
+                                editData.seo.meta_description?.[lang] || ""
+                              }
+                              onChange={(e) =>
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  seo: {
+                                    ...prev.seo,
+                                    meta_description: {
+                                      ...prev.seo.meta_description,
+                                      [lang]: e.target.value,
+                                    },
+                                  },
+                                }))
+                              }
+                              disabled={saving}
+                            />
+                            <Form.Text className="text-muted">
+                              {t("dashboard.panel.pages.meta_description_help")}
+                            </Form.Text>
+                          </Form.Group>
 
-                      <Form.Group className="mb-3">
-                        <Form.Label>Meta Keywords {lang.toUpperCase()}</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={editData.seo.meta_keywords?.[lang] || ""}
-                          onChange={(e) => setEditData(prev => ({
-                            ...prev,
-                            seo: {
-                              ...prev.seo,
-                              meta_keywords: { ...prev.seo.meta_keywords, [lang]: e.target.value }
-                            }
-                          }))}
-                          disabled={saving}
-                        />
-                        <Form.Text className="text-muted">
-                          {t("dashboard.panel.pages.meta_keywords_help")}
-                        </Form.Text>
-                      </Form.Group>
-                    </>
-                  )}
-                </LanguageTabs>
-              </Card.Body>
-            </Card>
+                          <Form.Group className="mb-3">
+                            <Form.Label>
+                              Meta Keywords {lang.toUpperCase()}
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={editData.seo.meta_keywords?.[lang] || ""}
+                              onChange={(e) =>
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  seo: {
+                                    ...prev.seo,
+                                    meta_keywords: {
+                                      ...prev.seo.meta_keywords,
+                                      [lang]: e.target.value,
+                                    },
+                                  },
+                                }))
+                              }
+                              disabled={saving}
+                            />
+                            <Form.Text className="text-muted">
+                              {t("dashboard.panel.pages.meta_keywords_help")}
+                            </Form.Text>
+                          </Form.Group>
+                        </>
+                      )}
+                    </LanguageTabs>
+                  </Card.Body>
+                </Card>
+              </Tab>
+            </Tabs>
 
             <div className="d-flex justify-content-end gap-2">
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 onClick={() => navigate("/pages")}
                 disabled={saving}
               >
                 {t("common.cancel")}
               </Button>
-              <Button 
-                variant="primary" 
-                type="submit" 
-                disabled={saving}
-              >
+              <Button variant="danger" type="submit" disabled={saving}>
                 {saving && <Spinner size="sm" className="me-2" />}
                 {id ? t("common.update") : t("common.create")}
               </Button>
             </div>
-          </Form>
-        </Card.Body>
-      </Card>
+          </Card.Body>
+        </Card>
+      </Form>
     </>
   );
 };

@@ -165,7 +165,7 @@ const Pages = () => {
                           <Button
                             variant="primary"
                             size="sm"
-                            href={`/pages/edit/${page.id}`}
+                            onClick={() => navigate(`/pages/edit/${page.id}`)}
                           >
                             <i className="bi bi-pencil"></i>
                           </Button>
@@ -226,7 +226,10 @@ const Pages = () => {
                   ? t("dashboard.panel.pages.try_found")
                   : t("dashboard.panel.pages.no_page")}
               </p>
-              <Button variant="secondary" href="/pages/new">
+              <Button 
+                variant="secondary" 
+                onClick={() => navigate("/pages/new")}
+              >
                 {t("dashboard.panel.pages.try_new")}
               </Button>
             </div>
@@ -236,18 +239,19 @@ const Pages = () => {
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
+          <Modal.Title className="text-danger">{t("common.confirm_delete")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete page "
-          <strong>{selectedPage?.title}</strong>"? This action cannot be undone.
+          {t("common.action_before_page")}
+          <strong>{selectedPage?.name[locale]}</strong>
+          {t("common.action_after")}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button variant="danger" onClick={handleDeleteConfirm}>
-            Delete
+            {t("common.delete")}
           </Button>
         </Modal.Footer>
       </Modal>
